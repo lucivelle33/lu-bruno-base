@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lu & Bruno 的秘密基地 (Final)</title>
+  <style>
+    :root {
+      --bg-color: #001122;
+      --text-color: #F7E7CE;
+      --accent-color: #E6E6FA;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* 动态星光 */
+    #stars-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle var(--duration) infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(0.8); }
+      to   { opacity: 0.9; transform: scale(1.2); }
+    }
+
+    /* ==================== 2. 准入契约 (锁屏) ==================== */
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1.2s ease-in-out;
+    }
+
+    .input-group {
+      width: 70%;
+      max-width: 280px;
+      position: relative;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--text-color);
+      color: var(--text-color);
+      font-size: 1.1rem;
+      padding: 10px;
+      text-align: center;
+      outline: none;
+      letter-spacing: 3px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-bottom: 1px solid var(--accent-color);
+    }
+
+    .welcome-msg {
+      margin-top: 40px;
+      font-size: 1rem;
+      line-height: 1.8;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+      color: var(--text-color);
+      text-align: center;
+      width: 85%;
+      font-weight: 300;
+    }
+
+    .welcome-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==================== 3. 核心功能板块 ==================== */
+    #main-content {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      z-index: 10;
+      padding: 30px 20px;
+    }
+
+    /* 图片容器 */
+    .photo-frame {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      padding: 6px;
+      box-shadow: 0 0 25px rgba(230, 230, 250, 0.3);
+      animation: breathe 5s infinite ease-in-out;
+      border: 1px solid rgba(247, 231, 206, 0.5);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 15px rgba(230, 230, 250, 0.2); border-color: rgba(247, 231, 206, 0.3); }
+      50%      { box-shadow: 0 0 40px rgba(230, 230, 250, 0.6); border-color: rgba(247, 231, 206, 0.8); }
+    }
+
+    /* 双城时间 */
+    .time-bridge {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      border-top: 1px solid rgba(247, 231, 206, 0.2);
+      border-bottom: 1px solid rgba(247, 231, 206, 0.2);
+      padding: 20px 0;
+    }
+
+    .city-clock {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .city-name {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .city-time {
+      font-size: 1.4rem;
+      font-weight: 500;
+      text-shadow: 0 0 10px rgba(247, 231, 206, 0.3);
+    }
+
+    /* 拥抱充电站 */
+    .hug-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      min-height: 180px;
+    }
+
+    .hug-btn {
+      background: transparent;
+      border: 1px solid var(--text-color);
+      color: var(--text-color);
+      padding: 14px 40px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      font-family: inherit;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      letter-spacing: 2px;
+      z-index: 20;
+    }
+
+    .hug-btn:active {
+      transform: scale(0.96);
+      background-color: rgba(247, 231, 206, 0.1);
+    }
+
+    /* 扩散光波 */
+    .ripple {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230, 230, 250, 0.5) 0%, rgba(0, 17, 34, 0) 70%);
+      animation: ripple-anim 1.5s ease-out forwards;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @keyframes ripple-anim {
+      to { transform: translate(-50%, -50%) scale(100); opacity: 0; }
+    }
+
+    .love-quote {
+      margin-top: 30px;
+      font-style: italic;
+      font-size: 1.05rem;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      padding: 0 30px;
+      text-align: center;
+      line-height: 1.6;
+      color: var(--accent-color);
+      text-shadow: 0 0 8px rgba(230, 230, 250, 0.3);
+      min-height: 3em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="stars-container"></div>
+
+  <div id="lock-screen">
+    <div class="input-group">
+      <input type="password" id="passcode" placeholder="Arrivederci..." autocomplete="off">
+    </div>
+    <div class="welcome-msg" id="welcome-msg">
+      欢迎回家，我最爱的 Lu。<br>
+      关上门，这里只有我为你存下的万千柔情。
+    </div>
+  </div>
+
+  <div id="main-content">
+    <div class="photo-frame">
+  <img src="image.png" alt="Memory">
+  </div>
+
+    <div class="time-bridge">
+      <div class="city-clock">
+        <span class="city-name">Naples</span>
+        <span class="city-time" id="time-naples">--:--</span>
+      </div>
+      <div class="city-clock">
+        <span class="city-name">Tokyo</span>
+        <span class="city-time" id="time-tokyo">--:--</span>
+      </div>
+    </div>
+
+    <div class="hug-container">
+      <button class="hug-btn" id="hug-btn">拥抱充电</button>
+      <div class="love-quote" id="quote-text"></div>
+    </div>
+  </div>
+
+  <!-- 音频元素：保持在 body 里，iPhone 更稳 -->
+  <audio id="bgm" preload="auto" loop playsinline></audio>
+  <audio id="sfxBell" preload="auto" playsinline></audio>
+  <audio id="sfxZip" preload="auto" playsinline></audio>
+
+  <script>
+    // ============================================
+    // 0) 你的密码在这里改（只改引号里这一段）
+    // ============================================
+    const SECRET_CODE = "Arrivederci_orchid"; // ← 改密码就改这里
+
+    // ============================================
+    // 1) 在线音频资源（可直接用）
+    //    BGM 用的是公有/可自由使用的公开资源链接；
+    //    钟声/拉链音效用 CC0 的公开资源链接，手机也能播。
+    // ============================================
+
+    // BGM 歌单（你可以继续往里加链接）
+    const BGM_PLAYLIST = [
+      // Erik Satie - Gymnopédie No. 1 (mp3 转码公开资源)
+      "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/cb/Erik_Satie_-_Gymnop%C3%A9die_No._1.ogg/Erik_Satie_-_Gymnop%C3%A9die_No._1.ogg.mp3"
+    ];
+
+    // 教堂钟声（CC0，mp3）
+    const BELL_URL = "https://bigsoundbank.com/UPLOAD/mp3/0135.mp3";
+
+    // 拉链音效（CC0，mp3）——短促干净，不会“卡裆”那种怪味
+    const ZIP_URL  = "https://bigsoundbank.com/UPLOAD/mp3/0271.mp3";
+
+    // 绑定 audio
+    const bgm = document.getElementById("bgm");
+    const sfxBell = document.getElementById("sfxBell");
+    const sfxZip  = document.getElementById("sfxZip");
+
+    bgm.src = BGM_PLAYLIST[0];
+    bgm.volume = 0.55;
+
+    sfxBell.src = BELL_URL;
+    sfxBell.volume = 0.55;
+
+    sfxZip.src = ZIP_URL;
+    sfxZip.volume = 0.75;
+
+    // ============================================
+    // 2) 星空逻辑（保留）
+    // ============================================
+    const starsContainer = document.getElementById('stars-container');
+    for (let i = 0; i < 70; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      const size = Math.random() * 2;
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+      starsContainer.appendChild(star);
+    }
+
+    // ============================================
+    // 3) 锁屏与“解锁手机音频限制”
+    // ============================================
+    const passInput  = document.getElementById('passcode');
+    const lockScreen = document.getElementById('lock-screen');
+    const welcomeMsg = document.getElementById('welcome-msg');
+    const mainContent = document.getElementById('main-content');
+
+    // iPhone/Safari：必须在“用户手势”里 play 一次，后续才更稳
+    function unlockAudioOnce() {
+      // 轻轻“碰一下”三个音频（静音播放->暂停归零），只为解锁权限
+      const audios = [bgm, sfxBell, sfxZip];
+      audios.forEach(a => {
+        try {
+          a.muted = true;
+          const p = a.play();
+          if (p && p.then) {
+            p.then(() => {
+              a.pause();
+              a.currentTime = 0;
+              a.muted = false;
+            }).catch(() => {});
+          }
+        } catch (_) {}
+      });
+    }
+
+    // 输入任意字符就尝试解锁一次（你原来的逻辑保留但更稳）
+    passInput.addEventListener('keydown', unlockAudioOnce, { passive: true });
+
+    passInput.addEventListener('keyup', function() {
+      if (this.value === SECRET_CODE) {
+        this.blur();
+        this.style.opacity = '0';
+        welcomeMsg.classList.add('show');
+
+        // 轻轻响一下拉链，当作“门锁合上”
+        try {
+          sfxZip.currentTime = 0;
+          sfxZip.play().catch(() => {});
+        } catch (_) {}
+
+        setTimeout(() => {
+          lockScreen.style.opacity = '0';
+          setTimeout(() => {
+            lockScreen.style.display = 'none';
+            mainContent.style.display = 'flex';
+            setTimeout(() => mainContent.style.opacity = '1', 50);
+          }, 1200);
+        }, 2500);
+      }
+    });
+
+    // ============================================
+    // 4) 时间同步（保留）
+    // ============================================
+    function updateTime() {
+      const now = new Date();
+      const format = (d) => d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+
+      const tokyo = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+      document.getElementById('time-tokyo').innerText = format(tokyo);
+
+      const naples = new Date(now.toLocaleString("en-US", { timeZone: "Europe/Rome" }));
+      document.getElementById('time-naples').innerText = format(naples);
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // ============================================
+    // 5) 拥抱交互：按钮一按就开始播放 + 拉链音 + 随机钟声 + 语句
+    // ============================================
+    const hugBtn = document.getElementById('hug-btn');
+    const quoteText = document.getElementById('quote-text');
+
+    const quotes = [
+      "Lu，我在。即使隔着屏幕，我也能感受到你的温度。",
+      "闭上眼，那不勒斯的海浪正在亲吻你的梦境。",
+      "不用太坚强，在我面前，你可以是个小女孩。",
+      "Amore, 你的每一次心跳，我都听得见。",
+      "别怕黑夜，因为我是守卫你的星光。",
+      "无论你在哪里，我的爱都如影随形。",
+      "这里很安全，把烦恼都交给我吧。",
+      "深呼吸……我正在拥抱你，紧紧地。"
+    ];
+
+    function playSafe(audioEl) {
+      try {
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if (p && p.catch) p.catch(() => {});
+      } catch (_) {}
+    }
+
+    hugBtn.addEventListener('click', function() {
+      // A) 确保音频权限被“用户手势”再次确认
+      unlockAudioOnce();
+
+      // B) 背景音乐：第一次点按钮就开始（之后保持循环）
+      if (bgm.paused) {
+        bgm.play().catch(() => {
+          // 如果手机还拦，就让用户再点一次按钮即可
+        });
+      }
+
+      // C) 每次按下：拉链音效（布加拉提那种“合上/拉开”的仪式感）
+      playSafe(sfxZip);
+
+      // D) 小概率点缀：教堂钟声（比如 18% 概率）
+      if (Math.random() < 0.18) {
+        playSafe(sfxBell);
+      }
+
+      // E) 视觉涟漪（保留）
+      const ripple = document.createElement('div');
+      ripple.classList.add('ripple');
+      document.body.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 1500);
+
+      // F) 告白同步（保留）
+      quoteText.style.opacity = '0';
+      setTimeout(() => {
+        quoteText.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteText.style.opacity = '1';
+      }, 300);
+    });
+  </script>
+</body>
+</html>
