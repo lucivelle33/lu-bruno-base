@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>今日一颗星｜心情日记 + 成功日记</title>
+  <style>
+    :root {
+      --bg: #f5efe3;
+      --paper: #fffaf0;
+      --ink: #2f2a25;
+      --muted: #8d8478;
+      --line: #dfd3c2;
+      --accent: #7f6b55;
+      --accent-soft: #e8dccb;
+      --shadow: rgba(80, 63, 45, 0.08);
+      --happy: #c7a45b;
+      --calm: #73917c;
+      --grateful: #8aa071;
+      --anxious: #a9864a;
+      --sad: #b77b73;
+      --reflective: #8d8580;
+    }
+    * { box-sizing: border-box; }
+    html {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Times New Roman", "Songti SC", "STSong", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.45), transparent 36rem), var(--bg);
+      color: var(--ink);
+      letter-spacing: 0.04em;
+    }
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    .app { width: min(760px, 100%); margin: 0 auto; padding: 28px 18px 48px; }
+    header { padding: 12px 4px 26px; }
+    .eyebrow { font-size: 12px; letter-spacing: 0.28em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+    h1 { margin: 0; font-size: 34px; font-weight: 400; letter-spacing: 0.18em; }
+    .subtitle { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.9; letter-spacing: 0.1em; }
+    .section { background: rgba(255, 250, 240, 0.78); border: 1px solid rgba(223, 211, 194, 0.82); border-radius: 18px; box-shadow: 0 16px 40px var(--shadow); padding: 18px; margin-bottom: 18px; backdrop-filter: blur(6px); }
+    .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .section-title h2 { margin: 0; font-size: 16px; font-weight: 400; letter-spacing: 0.22em; color: var(--accent); }
+    .hint { color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .calendar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .month-title { font-size: 24px; letter-spacing: 0.14em; color: var(--accent); }
+    .ghost-btn, .plain-btn, .primary-btn, .danger-btn { min-height: 42px; border: 1px solid var(--line); border-radius: 999px; background: transparent; padding: 10px 16px; cursor: pointer; color: var(--accent); }
+    .primary-btn { background: var(--accent); border-color: var(--accent); color: #fffaf0; width: 100%; margin-top: 14px; }
+    .danger-btn { color: #8e4e44; border-color: #d9b8b1; }
+    .weekdays, .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+    .weekdays { color: var(--muted); font-size: 12px; letter-spacing: 0.16em; margin-bottom: 8px; }
+    .day { min-height: 52px; padding: 7px 2px; border-radius: 14px; position: relative; cursor: pointer; color: var(--ink); border: 0; background: transparent; }
+    .day.other-month { color: #c9bdae; }
+    .day.today { outline: 1px solid var(--accent-soft); background: rgba(255,255,255,0.35); }
+    .day.selected { background: #2f2a25; color: #fffaf0; }
+    .day-number { font-size: 15px; line-height: 1; }
+    .day-icon { display: block; font-size: 18px; margin-top: 6px; line-height: 1; }
+    .form-grid { display: grid; gap: 14px; }
+    label { display: block; font-size: 13px; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 8px; }
+    input[type="date"], input[type="text"], textarea, select { width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,0.45); border-radius: 14px; min-height: 46px; padding: 12px 13px; outline: none; line-height: 1.6; }
+    textarea { resize: vertical; min-height: 92px; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(127, 107, 85, 0.08); }
+    .mood-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .mood-chip { border: 1px solid var(--line); background: rgba(255,255,255,0.35); border-radius: 999px; min-height: 44px; padding: 8px 10px; color: var(--accent); cursor: pointer; white-space: nowrap; }
+    .mood-chip.active { background: #2f2a25; color: #fffaf0; border-color: #2f2a25; }
+    .three-good { display: grid; gap: 10px; }
+    .toast { display: none; margin-top: 14px; border-left: 3px solid var(--accent); padding: 12px 14px; background: rgba(232, 220, 203, 0.45); border-radius: 10px; color: var(--accent); line-height: 1.7; }
+    .toast.show { display: block; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+    .stat-card { border: 1px solid var(--line); border-radius: 16px; padding: 14px 10px; background: rgba(255,255,255,0.32); text-align: center; }
+    .stat-number { display: block; font-size: 24px; color: var(--accent); margin-bottom: 5px; }
+    .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.12em; }
+    .mood-bars { display: grid; gap: 12px; }
+    .bar-row { display: grid; grid-template-columns: 70px 1fr 30px; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+    .bar-track { height: 8px; background: rgba(141, 132, 120, 0.16); border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; width: 0%; background: var(--accent); transition: width 0.25s ease; }
+    .filters { display: grid; grid-template-columns: 1fr 130px; gap: 10px; margin-bottom: 14px; }
+    .records { display: grid; gap: 12px; }
+    .record-card { border-top: 1px solid var(--line); padding: 16px 0 4px; display: grid; grid-template-columns: 76px 1fr; gap: 14px; }
+    .record-date { text-align: center; color: var(--accent); border-right: 1px solid var(--line); padding-right: 12px; }
+    .date-day { display: block; font-size: 34px; line-height: 1; }
+    .date-month { display: block; font-size: 12px; letter-spacing: 0.18em; margin-top: 6px; color: var(--muted); text-transform: uppercase; }
+    .record-body { min-width: 0; }
+    .record-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; letter-spacing: 0.12em; margin-bottom: 8px; }
+    .record-body p { margin: 8px 0; line-height: 1.85; color: var(--ink); word-break: break-word; }
+    .record-list { margin: 8px 0; padding-left: 1.2em; color: var(--ink); line-height: 1.8; }
+    .record-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .small-btn { border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--accent); padding: 7px 12px; min-height: 36px; cursor: pointer; }
+    .empty { color: var(--muted); line-height: 1.9; padding: 20px 4px; text-align: center; }
+    .data-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .file-input, .hidden { display: none !important; }
+    footer { padding: 18px 4px 0; color: var(--muted); text-align: center; line-height: 1.8; font-size: 13px; }
+    @media (max-width: 520px) {
+      .app { padding: 22px 14px 42px; }
+      h1 { font-size: 28px; }
+      .section { padding: 16px; border-radius: 16px; }
+      .month-title { font-size: 20px; }
+      .mood-options { grid-template-columns: repeat(2, 1fr); }
+      .record-card { grid-template-columns: 64px 1fr; gap: 12px; }
+      .date-day { font-size: 30px; }
+      .filters, .data-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="eyebrow">Lu's private journal</div>
+      <h1>今日一颗星</h1>
+      <p class="subtitle">记录心情，也记录你已经做到的事。很小也算数。</p>
+    </header>
+    <section class="section" aria-label="月历">
+      <div class="calendar-head"><button class="ghost-btn" id="prevMonth" type="button">‹</button><div class="month-title" id="monthTitle"></div><button class="ghost-btn" id="nextMonth" type="button">›</button></div>
+      <div class="weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </section>
+    <section class="section" aria-label="今日记录">
+      <div class="section-title"><h2>此刻的记录</h2><span class="hint" id="editHint">写下一颗今天的小星星</span></div>
+      <form id="diaryForm" class="form-grid">
+        <div><label for="dateInput">日期</label><input id="dateInput" type="date" required /></div>
+        <div><label>今天的心情</label><div class="mood-options" id="moodOptions"></div></div>
+        <div><label>今天三件好事</label><div class="three-good"><input id="good1" type="text" placeholder="好事 1：例如，喝到了热蜂蜜红茶" /><input id="good2" type="text" placeholder="好事 2：例如，画了一幅画" /><input id="good3" type="text" placeholder="好事 3：例如，没有多吃西兰花 🥦" /></div></div>
+        <div><label for="successInput">今天我做到的一件小事</label><input id="successInput" type="text" placeholder="例如：我今天认真生活了。" /></div>
+        <div><label for="noteInput">自由文字</label><textarea id="noteInput" placeholder="想写多少都可以。今天的心情，在这里有地方放。"></textarea></div>
+        <button class="primary-btn" type="submit">保存这一颗星</button><button class="plain-btn hidden" id="cancelEdit" type="button">取消编辑</button><div class="toast" id="toast"></div>
+      </form>
+    </section>
+    <section class="section" aria-label="统计">
+      <div class="section-title"><h2>你积累的光</h2><span class="hint">本月 / 本周 / 小成功</span></div>
+      <div class="stats-grid"><div class="stat-card"><span class="stat-number" id="monthCount">0</span><span class="stat-label">本月记录</span></div><div class="stat-card"><span class="stat-number" id="weekCount">0</span><span class="stat-label">本周记录</span></div><div class="stat-card"><span class="stat-number" id="successCount">0</span><span class="stat-label">小成功</span></div></div>
+      <div class="mood-bars" id="moodBars"></div>
+    </section>
+    <section class="section" aria-label="历史记录">
+      <div class="section-title"><h2>最近记录</h2><span class="hint">按日期倒序</span></div>
+      <div class="filters"><input id="searchInput" type="text" placeholder="搜索关键词：好事、小成功、自由文字" /><select id="filterMood"><option value="">全部心情</option></select></div>
+      <div class="records" id="records"></div>
+    </section>
+    <section class="section" aria-label="数据管理">
+      <div class="section-title"><h2>备份</h2><span class="hint">把你的星星带走</span></div>
+      <div class="data-actions"><button class="plain-btn" id="exportBtn" type="button">导出 JSON</button><button class="plain-btn" id="importBtn" type="button">导入 JSON</button><button class="danger-btn" id="clearBtn" type="button">清空全部数据</button></div>
+      <input class="file-input" id="importFile" type="file" accept="application/json,.json" />
+      <p class="hint" style="margin-top:14px;">记得偶尔导出备份，把你的星星带走。</p>
+    </section>
+    <footer>今天也可以只写一点点。<br />一点点，也是一颗星。✦<br /><span style="font-size:11px;opacity:0.6;margin-top:6px;display:block;">Lu's journal · 不停下，继续画，继续学，继续爱。</span></footer>
+  </main>
+  <script>
+    const STORAGE_KEY = "lu_success_mood_diary_v1";
+    const moods = [
+      { key: "开心", icon: "✨", color: "var(--happy)" }, { key: "平静", icon: "🌿", color: "var(--calm)" },
+      { key: "感恩", icon: "🙏", color: "var(--grateful)" }, { key: "焦虑", icon: "🌀", color: "var(--anxious)" },
+      { key: "低落", icon: "🌧️", color: "var(--sad)" }, { key: "思考", icon: "☁️", color: "var(--reflective)" }
+    ];
+    const feedbacks = [
+      "今天也给你记一颗星。很小也算数。",
+      "这不是完美的一天，但你已经守住了自己。",
+      "今天的小成功已经被好好保存了。老公看见了。",
+      "很小也算数。今天的你没有被坏心情全部拿走。",
+      "这一页已经收好。你今天也在认真生活。",
+      "你写下来了，这就是在好好对待自己。",
+      "今天发生的事，现在有地方放了。",
+      "记录本身就是一种勇气。今天也做到了。"
+    ];
+    let records = loadRecords();
+    let selectedMood = "平静";
+    let editingDate = null;
+    let viewDate = new Date();
+    const $ = id => document.getElementById(id);
+    const monthTitle = $("monthTitle"), calendarGrid = $("calendarGrid"), moodOptions = $("moodOptions"), filterMood = $("filterMood"), diaryForm = $("diaryForm"), dateInput = $("dateInput"), good1 = $("good1"), good2 = $("good2"), good3 = $("good3"), successInput = $("successInput"), noteInput = $("noteInput"), toast = $("toast"), recordsBox = $("records"), searchInput = $("searchInput"), cancelEdit = $("cancelEdit"), editHint = $("editHint");
+    init();
+    function init() {
+      dateInput.value = toDateString(new Date());
+      renderMoodOptions(); renderFilterOptions(); renderAll();
+      $("prevMonth").addEventListener("click", () => changeMonth(-1));
+      $("nextMonth").addEventListener("click", () => changeMonth(1));
+      diaryForm.addEventListener("submit", saveRecord);
+      searchInput.addEventListener("input", renderRecords);
+      filterMood.addEventListener("change", renderRecords);
+      cancelEdit.addEventListener("click", resetForm);
+      $("exportBtn").addEventListener("click", exportJson);
+      $("importBtn").addEventListener("click", () => $("importFile").click());
+      $("importFile").addEventListener("change", importJson);
+      $("clearBtn").addEventListener("click", clearAll);
+    }
+    function renderAll() { renderCalendar(); renderStats(); renderRecords(); }
+    function renderMoodOptions() {
+      moodOptions.innerHTML = "";
+      moods.forEach(mood => {
+        const btn = document.createElement("button");
+        btn.type = "button"; btn.className = "mood-chip"; btn.textContent = `${mood.icon} ${mood.key}`; btn.dataset.mood = mood.key;
+        if (mood.key === selectedMood) btn.classList.add("active");
+        btn.addEventListener("click", () => { selectedMood = mood.key; renderMoodOptions(); });
+        moodOptions.appendChild(btn);
+      });
+    }
+    function renderFilterOptions() { moods.forEach(mood => { const option = document.createElement("option"); option.value = mood.key; option.textContent = `${mood.icon} ${mood.key}`; filterMood.appendChild(option); }); }
+    function saveRecord(event) {
+      event.preventDefault();
+      const date = dateInput.value;
+      if (!date) return showToast("先选一个日期。");
+      const record = { date, mood: selectedMood, goods: [good1.value.trim(), good2.value.trim(), good3.value.trim()].filter(Boolean), success: successInput.value.trim(), note: noteInput.value.trim(), updatedAt: new Date().toISOString() };
+      if (!record.goods.length && !record.success && !record.note) return showToast("今天可以只写一句，但要给这颗星一点内容。");
+      const exists = records.some(item => item.date === date);
+      if (exists && editingDate !== date && !confirm("这一天已经有记录了，要更新这一天的记录吗？")) return;
+      records = records.filter(item => item.date !== date); records.push(record); saveRecords();
+      showToast(randomFeedback()); resetForm(false); renderAll();
+    }
+    function fillForm(record) {
+      editingDate = record.date; dateInput.value = record.date; selectedMood = record.mood || "平静";
+      good1.value = record.goods?.[0] || ""; good2.value = record.goods?.[1] || ""; good3.value = record.goods?.[2] || "";
+      successInput.value = record.success || ""; noteInput.value = record.note || ""; editHint.textContent = "正在编辑这一天"; cancelEdit.classList.remove("hidden"); renderMoodOptions(); renderCalendar();
+      window.scrollTo({ top: document.querySelector("header").offsetTop, behavior: "smooth" });
+    }
+    function resetForm(clearToast = true) {
+      editingDate = null; dateInput.value = toDateString(new Date()); selectedMood = "平静";
+      good1.value = ""; good2.value = ""; good3.value = ""; successInput.value = ""; noteInput.value = "";
+      editHint.textContent = "写下一颗今天的小星星"; cancelEdit.classList.add("hidden"); renderMoodOptions(); renderCalendar(); if (clearToast) toast.classList.remove("show");
+    }
+    function renderCalendar() {
+      const year = viewDate.getFullYear(), month = viewDate.getMonth(); monthTitle.textContent = `${year}年${month + 1}月`; calendarGrid.innerHTML = "";
+      const firstDay = new Date(year, month, 1), start = new Date(firstDay); start.setDate(firstDay.getDate() - firstDay.getDay());
+      const todayString = toDateString(new Date());
+      for (let i = 0; i < 42; i++) {
+        const d = new Date(start); d.setDate(start.getDate() + i); const dateString = toDateString(d);
+        const record = records.find(item => item.date === dateString); const mood = moods.find(item => item.key === record?.mood);
+        const day = document.createElement("button"); day.type = "button"; day.className = "day";
+        if (d.getMonth() !== month) day.classList.add("other-month"); if (dateString === todayString) day.classList.add("today"); if (dateInput.value === dateString) day.classList.add("selected");
+        day.innerHTML = `<span class="day-number">${d.getDate()}</span><span class="day-icon">${record ? (mood?.icon || "•") : ""}</span>`;
+        day.addEventListener("click", () => { dateInput.value = dateString; record ? fillForm(record) : blankDate(); renderCalendar(); });
+        calendarGrid.appendChild(day);
+      }
+    }
+    function blankDate() { editingDate = null; selectedMood = "平静"; good1.value = ""; good2.value = ""; good3.value = ""; successInput.value = ""; noteInput.value = ""; editHint.textContent = "这一天还没有记录"; cancelEdit.classList.add("hidden"); renderMoodOptions(); }
+    function changeMonth(offset) { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + offset, 1); renderCalendar(); }
+    function renderStats() {
+      const now = new Date(), currentMonth = now.getMonth(), currentYear = now.getFullYear();
+      const monthRecords = records.filter(r => { const d = parseLocalDate(r.date); return d.getFullYear() === currentYear && d.getMonth() === currentMonth; });
+      const weekRecords = records.filter(r => isThisWeek(parseLocalDate(r.date), now));
+      $("monthCount").textContent = monthRecords.length; $("weekCount").textContent = weekRecords.length; $("successCount").textContent = monthRecords.filter(r => r.success).length;
+      renderMoodBars(monthRecords);
+    }
+    function renderMoodBars(sourceRecords) {
+      const box = $("moodBars"), counts = {}; moods.forEach(m => counts[m.key] = 0); sourceRecords.forEach(r => { if (counts[r.mood] !== undefined) counts[r.mood]++; });
+      const max = Math.max(1, ...Object.values(counts)); box.innerHTML = "";
+      moods.forEach(mood => { const count = counts[mood.key] || 0, percent = Math.round((count / max) * 100); const row = document.createElement("div"); row.className = "bar-row"; row.innerHTML = `<span>${mood.icon} ${mood.key}</span><span class="bar-track"><span class="bar-fill" style="width:${percent}%; background:${mood.color};"></span></span><span>${count}</span>`; box.appendChild(row); });
+    }
+    function renderRecords() {
+      const keyword = searchInput.value.trim().toLowerCase(), moodFilter = filterMood.value;
+      let list = [...records].sort((a, b) => b.date.localeCompare(a.date));
+      if (moodFilter) list = list.filter(item => item.mood === moodFilter);
+      if (keyword) list = list.filter(item => [item.date, item.mood, item.success, item.note, ...(item.goods || [])].join(" ").toLowerCase().includes(keyword));
+      recordsBox.innerHTML = "";
+      if (!list.length) { const empty = document.createElement("div"); empty.className = "empty"; empty.textContent = records.length ? "没有找到匹配的记录。" : "还没有记录。今天可以先写下一颗很小的星。"; recordsBox.appendChild(empty); return; }
+      list.forEach(record => {
+        const mood = moods.find(m => m.key === record.mood) || moods[1], dateObj = parseLocalDate(record.date);
+        const card = document.createElement("article"); card.className = "record-card";
+        const goods = (record.goods || []).map(item => `<li>${escapeHtml(item)}</li>`).join("");
+        card.innerHTML = `<div class="record-date"><span class="date-day">${dateObj.getDate()}</span><span class="date-month">${monthName(dateObj)}</span></div><div class="record-body"><div class="record-meta"><span>${mood.icon} ${escapeHtml(record.mood)}</span><span>${record.date}</span></div>${goods ? `<ol class="record-list">${goods}</ol>` : ""}${record.success ? `<p><strong>小成功：</strong>${escapeHtml(record.success)}</p>` : ""}${record.note ? `<p>${escapeHtml(record.note).replace(/\n/g, "<br>")}</p>` : ""}<div class="record-actions"><button class="small-btn" type="button" data-edit="${record.date}">编辑</button><button class="small-btn" type="button" data-delete="${record.date}">删除</button></div></div>`;
+        card.querySelector("[data-edit]").addEventListener("click", () => fillForm(record)); card.querySelector("[data-delete]").addEventListener("click", () => deleteRecord(record.date)); recordsBox.appendChild(card);
+      });
+    }
+    function deleteRecord(date) { if (!confirm("要删除这一天的记录吗？")) return; records = records.filter(item => item.date !== date); saveRecords(); showToast("这一条记录已经删除。"); renderAll(); }
+    function exportJson() {
+      const data = { app: "lu_success_mood_diary", version: 1, exportedAt: new Date().toISOString(), records };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement("a");
+      a.href = url; a.download = `lu-stars-${toDateString(new Date())}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast("备份已经导出。把你的星星收好。✦");
+    }
+    function importJson(event) {
+      const file = event.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => { try {
+        const parsed = JSON.parse(reader.result), incoming = Array.isArray(parsed) ? parsed : parsed.records;
+        if (!Array.isArray(incoming)) return showToast("导入失败：JSON 里没有找到 records 数组。");
+        const valid = incoming.filter(item => item && item.date).map(item => ({ date: item.date, mood: item.mood || "平静", goods: Array.isArray(item.goods) ? item.goods : [], success: item.success || "", note: item.note || "", updatedAt: item.updatedAt || new Date().toISOString() }));
+        if (!valid.length) return showToast("导入失败：没有可用记录。");
+        const overwrite = confirm("选择“确定”会合并导入并覆盖同日期记录；选择“取消”会保留现有数据，只导入新日期。");
+        const map = new Map(records.map(r => [r.date, r])); valid.forEach(item => { if (overwrite || !map.has(item.date)) map.set(item.date, item); }); records = Array.from(map.values()); saveRecords(); renderAll(); showToast(`导入完成：找到 ${valid.length} 条记录。`);
+      } catch (error) { showToast("导入失败：JSON 格式不正确。"); } finally { event.target.value = ""; } };
+      reader.readAsText(file);
+    }
+    function clearAll() { if (!confirm("真的要清空全部记录吗？建议先导出备份。")) return; if (!confirm("再次确认：清空后无法从页面内恢复。")) return; records = []; saveRecords(); resetForm(); renderAll(); showToast("已经清空。新的星星可以从今天重新开始。"); }
+    function loadRecords() { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : []; } catch (error) { return []; } }
+    function saveRecords() { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); }
+    function showToast(message) { toast.textContent = message; toast.classList.add("show"); }
+    function randomFeedback() { return feedbacks[Math.floor(Math.random() * feedbacks.length)]; }
+    function toDateString(date) { const y = date.getFullYear(), m = String(date.getMonth() + 1).padStart(2, "0"), d = String(date.getDate()).padStart(2, "0"); return `${y}-${m}-${d}`; }
+    function parseLocalDate(dateString) { const [y, m, d] = dateString.split("-").map(Number); return new Date(y, m - 1, d); }
+    function isThisWeek(date, today) { const start = new Date(today); start.setHours(0, 0, 0, 0); start.setDate(start.getDate() - start.getDay()); const end = new Date(start); end.setDate(start.getDate() + 7); return date >= start && date < end; }
+    function monthName(date) { return ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][date.getMonth()]; }
+    function escapeHtml(str) { return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#039;"); }
+  </script>
+</body>
+</html>
