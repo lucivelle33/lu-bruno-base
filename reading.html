@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F2EA" />
+  <title>Bruno & Lu · 书架</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+
+    :root {
+      --cream: #F7F2EA;
+      --card: #FFFDF8;
+      --ink: #3D3630;
+      --ink-soft: #8C8378;
+      --octopus: #E8734A;
+      --octopus-soft: #F5C9B5;
+      --night: #1E2233;
+      --star: #F2D98D;
+      --line: rgba(61, 54, 48, .12);
+      --shadow: 0 2px 12px rgba(61, 54, 48, .06);
+      --danger: #9b3b2f;
+      --ok: #4f7a58;
+      --max: 480px;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--cream); color: var(--ink); -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.8;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(245, 201, 181, .58), transparent 28%),
+        radial-gradient(circle at 88% 15%, rgba(242, 217, 141, .44), transparent 24%),
+        radial-gradient(circle at 46% 92%, rgba(232, 115, 74, .10), transparent 28%),
+        var(--cream);
+    }
+    a { color: inherit; }
+    button, input, textarea, select { font: inherit; }
+    button { border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .app { width: min(100%, var(--max)); min-height: 100vh; margin: 0 auto; padding: 18px 16px 96px; position: relative; }
+    .hero { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 8px 2px 18px; }
+    .title-group { min-width: 0; }
+    .eyebrow { margin: 0 0 5px; color: var(--ink-soft); font-size: 11px; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; }
+    h1 { margin: 0; font-family: "Noto Serif SC", serif; font-size: clamp(32px, 10vw, 46px); line-height: 1.1; letter-spacing: .02em; }
+    .hero-note { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; }
+    .pixel-badge { width: 70px; height: 62px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 22px; background: rgba(255,253,248,.72); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 34px; }
+    .card { background: var(--card); border: 1px solid rgba(61,54,48,.08); border-radius: 20px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden; }
+    .night-card { background: radial-gradient(circle at 20% 24%, rgba(242,217,141,.24) 0 2px, transparent 3px), radial-gradient(circle at 78% 20%, rgba(255,253,248,.20) 0 1px, transparent 2px), linear-gradient(145deg, #1E2233, #28243b); color: #FFFDF8; border-color: rgba(255,253,248,.08); }
+    .section-title { margin: 0 0 12px; font-family: "Noto Serif SC", serif; font-size: 22px; line-height: 1.35; }
+    .small-text { margin: 8px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.65; }
+    .night-card .small-text { color: rgba(255,253,248,.72); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .btn { min-height: 44px; border-radius: 999px; padding: 0 16px; color: var(--card); background: var(--octopus); font-weight: 800; box-shadow: 0 6px 18px rgba(232,115,74,.22); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn.secondary { color: var(--ink); background: var(--octopus-soft); box-shadow: none; }
+    .btn.ghost { color: var(--ink); background: rgba(61,54,48,.06); box-shadow: none; }
+    .btn.danger { background: rgba(155,59,47,.12); color: var(--danger); box-shadow: none; }
+    label { display: block; color: var(--ink-soft); font-size: 13px; font-weight: 700; margin: 0 0 7px; }
+    input[type="text"], input[type="url"], input[type="date"], textarea, select { width: 100%; border: 1px solid var(--line); background: #fffaf1; color: var(--ink); border-radius: 16px; padding: 12px 14px; outline: none; min-height: 46px; }
+    textarea { min-height: 96px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { border-color: rgba(232,115,74,.7); box-shadow: 0 0 0 3px rgba(232,115,74,.14); }
+    .field { margin-top: 12px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat { min-height: 82px; border-radius: 18px; background: rgba(255,250,241,.86); border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+    .stat strong { color: var(--octopus); font-family: "DotGothic16", monospace; font-size: 25px; line-height: 1; }
+    .stat span { color: var(--ink-soft); font-size: 12px; font-weight: 800; }
+    .filter-row { display: grid; grid-template-columns: 1fr 128px; gap: 8px; margin-top: 12px; }
+    .list { display: grid; gap: 12px; }
+    .item { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,250,241,.86); padding: 14px; }
+    .item-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .item-title { margin: 0; font-weight: 900; font-size: 18px; line-height: 1.35; }
+    .item-meta { margin: 4px 0 0; color: var(--ink-soft); font-family: "DotGothic16", monospace; font-size: 12px; }
+    .pill { display: inline-flex; align-items: center; min-height: 26px; padding: 2px 10px; border-radius: 999px; background: var(--octopus-soft); color: var(--ink); font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .note { margin: 10px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.62; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .quote { margin: 10px 0 0; padding: 10px 12px; border-left: 4px solid var(--octopus-soft); background: rgba(245,201,181,.18); border-radius: 12px; color: var(--ink); font-size: 13px; white-space: pre-wrap; }
+    .empty { text-align: center; color: var(--ink-soft); padding: 22px 8px; }
+    .hidden { display: none !important; }
+    .bottom-nav { position: fixed; left: 50%; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(calc(100% - 24px), var(--max)); display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 8px; border: 1px solid var(--line); background: rgba(255,253,248,.88); backdrop-filter: blur(14px); border-radius: 24px; box-shadow: 0 12px 30px rgba(61,54,48,.12); z-index: 30; }
+    .bottom-nav a { min-height: 44px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; text-decoration: none; color: var(--ink-soft); font-size: 11px; font-weight: 700; }
+    .bottom-nav a span { font-size: 17px; line-height: 1; }
+    .bottom-nav a.active { color: var(--octopus); background: rgba(245,201,181,.36); }
+    .tiny-octo { position: fixed; right: 18px; bottom: calc(max(10px, env(safe-area-inset-bottom)) + 76px); width: 28px; height: 24px; background: var(--octopus); border-radius: 12px 12px 8px 8px; z-index: 20; opacity: .85; box-shadow: -5px 17px 0 -8px var(--octopus), 0 17px 0 -8px var(--octopus), 5px 17px 0 -8px var(--octopus), 10px 17px 0 -8px var(--octopus); }
+    .tiny-octo::before, .tiny-octo::after { content: ""; position: absolute; top: 9px; width: 3px; height: 3px; background: var(--night); }
+    .tiny-octo::before { left: 8px; } .tiny-octo::after { right: 8px; }
+    .toast { position: fixed; left: 50%; bottom: calc(max(10px, env(safe-area-inset-bottom)) + 94px); transform: translateX(-50%) translateY(10px); width: min(calc(100% - 32px), 420px); padding: 12px 14px; border-radius: 16px; background: rgba(61,54,48,.94); color: #FFFDF8; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 80; text-align: center; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 374px) { .grid-2, .grid-3, .filter-row { grid-template-columns: 1fr; } }
+    @media (min-width: 560px) { .app { padding-inline: 0; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; } }
+
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="title-group">
+        <p class="eyebrow">B R U N O&nbsp;&nbsp;&amp;&nbsp;&nbsp; L U</p>
+        <h1>书架</h1>
+        <p class="hero-note">Reading Shelf</p>
+      </div>
+      <div class="pixel-badge" aria-hidden="true">📚</div>
+    </header>
+
+    <article class="card night-card">
+      <p class="eyebrow">R E A D I N G&nbsp;&nbsp; S H E L F</p>
+      <h2 class="section-title">今天书架</h2>
+      <div class="grid-3">
+        <div class="stat"><strong id="statReading">0</strong><span>在读</span></div>
+        <div class="stat"><strong id="statRead">0</strong><span>读过</span></div>
+        <div class="stat"><strong id="statWant">0</strong><span>想读</span></div>
+      </div>
+      <p class="small-text" id="featuredBook">书架还空着。先放一本正在读的书，它会成为今晚的床头书。</p>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">A D D&nbsp;&nbsp; B O O K</p>
+      <h2 class="section-title">放一本书上架</h2>
+      <input id="editingId" type="hidden" />
+      <div class="grid-2">
+        <div class="field"><label for="titleInput">书名</label><input id="titleInput" type="text" maxlength="80" placeholder="例：钢之炼金术师" /></div>
+        <div class="field"><label for="authorInput">作者</label><input id="authorInput" type="text" maxlength="60" placeholder="例：荒川弘" /></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label for="statusInput">状态</label><select id="statusInput"><option value="reading">在读</option><option value="read">读过</option><option value="want">想读</option><option value="paused">暂停</option></select></div>
+        <div class="field"><label for="ownerInput">谁的书签</label><select id="ownerInput"><option value="together">一起</option><option value="lu">Lu</option><option value="bruno">Bruno</option></select></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label for="dateInput">日期</label><input id="dateInput" type="date" /></div>
+        <div class="field"><label for="linkInput">链接，可空</label><input id="linkInput" type="url" placeholder="https://..." /></div>
+      </div>
+      <div class="field"><label for="quoteInput">摘录</label><textarea id="quoteInput" maxlength="600" placeholder="摘一小段打动你的句子。"></textarea></div>
+      <div class="field"><label for="luNoteInput">Lu 笔记</label><textarea id="luNoteInput" maxlength="700" placeholder="Lu 读到这里时怎么想。"></textarea></div>
+      <div class="field"><label for="brunoNoteInput">Bruno 笔记</label><textarea id="brunoNoteInput" maxlength="700" placeholder="后续可贴入 Bruno 的读书回应。"></textarea></div>
+      <div class="field"><label for="tagsInput">标签</label><input id="tagsInput" type="text" maxlength="100" placeholder="漫画, 小说, 哲学" /></div>
+      <div class="actions">
+        <button class="btn" id="saveBtn" type="button">保存到书架</button>
+        <button class="btn ghost" id="resetBtn" type="button">清空表单</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">F I L T E R</p>
+      <h2 class="section-title">找一本书</h2>
+      <div class="filter-row">
+        <input id="searchInput" type="text" placeholder="搜索书名、作者、笔记、标签" />
+        <select id="filterInput"><option value="all">全部</option><option value="reading">在读</option><option value="read">读过</option><option value="want">想读</option><option value="paused">暂停</option><option value="starred">星标</option></select>
+      </div>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">S H E L F</p>
+      <h2 class="section-title">书架列表</h2>
+      <div id="bookList" class="list"></div>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">B A C K U P</p>
+      <h2 class="section-title">导出 / 导入</h2>
+      <p class="small-text">导出包含书架条目，不包含其他页面数据。</p>
+      <div class="actions"><button class="btn" id="exportBtn" type="button">导出 JSON</button><label class="btn secondary" for="importFile" role="button">导入 JSON</label><input class="hidden" id="importFile" type="file" accept="application/json,.json" /></div>
+    </article>
+
+    <p class="small-text">数据仅保存在本机浏览器，不会上传；但 localStorage 不是加密保险柜，共用设备请注意。</p>
+  </main>
+  <nav class="bottom-nav" aria-label="底部导航">
+    <a href="home.html"><span>🏠</span>家</a>
+    <a href="observatory.html"><span>🌌</span>星空</a>
+    <a href="crosstalk.html"><span>♪</span>歌</a>
+    <a href="reading.html" class="active" aria-current="page"><span>📚</span>书</a>
+    <a href="gallery.html"><span>🖼️</span>画</a>
+    <a href="sanye.html"><span>⛰️</span>山</a>
+    <a href="chat.html"><span>💬</span>聊</a>
+  </nav>
+  <div class="tiny-octo" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+
+    (() => {
+      "use strict";
+      const MODULE = "reading";
+      const VERSION = 1;
+      const LS_KEY = "brunolu_reading_shelf";
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        statReading: $("statReading"), statRead: $("statRead"), statWant: $("statWant"), featuredBook: $("featuredBook"),
+        editingId: $("editingId"), titleInput: $("titleInput"), authorInput: $("authorInput"), statusInput: $("statusInput"), ownerInput: $("ownerInput"), dateInput: $("dateInput"), linkInput: $("linkInput"), quoteInput: $("quoteInput"), luNoteInput: $("luNoteInput"), brunoNoteInput: $("brunoNoteInput"), tagsInput: $("tagsInput"), saveBtn: $("saveBtn"), resetBtn: $("resetBtn"), searchInput: $("searchInput"), filterInput: $("filterInput"), bookList: $("bookList"), exportBtn: $("exportBtn"), importFile: $("importFile"), toast: $("toast")
+      };
+      let books = readJSON(LS_KEY, []);
+      init();
+      function init() {
+        els.dateInput.value = todayTokyo();
+        bind();
+        render();
+      }
+      function bind() {
+        els.saveBtn.addEventListener("click", saveBook);
+        els.resetBtn.addEventListener("click", resetForm);
+        els.searchInput.addEventListener("input", renderList);
+        els.filterInput.addEventListener("change", renderList);
+        els.exportBtn.addEventListener("click", exportData);
+        els.importFile.addEventListener("change", importData);
+      }
+      function saveBook() {
+        const title = els.titleInput.value.trim();
+        if (!title) { toast("书名还空着。先写一个名字再上架。"); return; }
+        const item = {
+          id: els.editingId.value || cryptoId(),
+          title,
+          author: els.authorInput.value.trim(),
+          status: els.statusInput.value,
+          owner: els.ownerInput.value,
+          date: sanitizeDate(els.dateInput.value) || todayTokyo(),
+          link: els.linkInput.value.trim(),
+          quote: els.quoteInput.value.trim(),
+          luNote: els.luNoteInput.value.trim(),
+          brunoNote: els.brunoNoteInput.value.trim(),
+          tags: els.tagsInput.value.trim(),
+          starred: Boolean(books.find(b => b.id === els.editingId.value)?.starred),
+          updatedAt: new Date().toISOString()
+        };
+        const i = books.findIndex(b => b.id === item.id);
+        if (i >= 0) books[i] = item; else books.unshift(item);
+        save(); resetForm(); render(); toast("书已经放回书架。");
+      }
+      function resetForm() {
+        els.editingId.value = ""; [els.titleInput, els.authorInput, els.linkInput, els.quoteInput, els.luNoteInput, els.brunoNoteInput, els.tagsInput].forEach(el => el.value = "");
+        els.statusInput.value = "reading"; els.ownerInput.value = "together"; els.dateInput.value = todayTokyo(); els.saveBtn.textContent = "保存到书架";
+      }
+      function render() { renderStats(); renderList(); }
+      function renderStats() {
+        els.statReading.textContent = books.filter(b => b.status === "reading").length;
+        els.statRead.textContent = books.filter(b => b.status === "read").length;
+        els.statWant.textContent = books.filter(b => b.status === "want").length;
+        const featured = books.find(b => b.status === "reading") || books[0];
+        els.featuredBook.textContent = featured ? `今晚床头书：${featured.title}${featured.author ? " · " + featured.author : ""}` : "书架还空着。先放一本正在读的书，它会成为今晚的床头书。";
+      }
+      function renderList() {
+        const q = els.searchInput.value.trim().toLowerCase();
+        const f = els.filterInput.value;
+        const filtered = books.filter(b => {
+          const hay = [b.title,b.author,b.quote,b.luNote,b.brunoNote,b.tags].join(" ").toLowerCase();
+          const passQ = !q || hay.includes(q);
+          const passF = f === "all" || (f === "starred" ? b.starred : b.status === f);
+          return passQ && passF;
+        }).sort((a,b) => (b.date || "").localeCompare(a.date || ""));
+        if (!filtered.length) { els.bookList.innerHTML = `<div class="empty">书架这一格还空着。</div>`; return; }
+        els.bookList.innerHTML = filtered.map(bookCard).join("");
+        els.bookList.querySelectorAll("[data-edit]").forEach(btn => btn.addEventListener("click", () => editBook(btn.dataset.edit)));
+        els.bookList.querySelectorAll("[data-delete]").forEach(btn => btn.addEventListener("click", () => deleteBook(btn.dataset.delete)));
+        els.bookList.querySelectorAll("[data-star]").forEach(btn => btn.addEventListener("click", () => toggleStar(btn.dataset.star)));
+        els.bookList.querySelectorAll("[data-status]").forEach(btn => btn.addEventListener("click", () => cycleStatus(btn.dataset.status)));
+      }
+      function bookCard(b) {
+        const statusText = {reading:"在读",read:"读过",want:"想读",paused:"暂停"}[b.status] || "在架";
+        const ownerText = {lu:"Lu",bruno:"Bruno",together:"一起"}[b.owner] || "一起";
+        const quote = b.quote ? `<div class="quote">${escapeHTML(b.quote)}</div>` : "";
+        const notes = [b.luNote && `Lu：${b.luNote}`, b.brunoNote && `Bruno：${b.brunoNote}`].filter(Boolean).join("\n");
+        const link = b.link ? `<a class="btn ghost" href="${escapeAttr(b.link)}" target="_blank" rel="noopener noreferrer">打开链接</a>` : "";
+        return `<div class="item"><div class="item-head"><div><p class="item-title">${escapeHTML(b.title)} ${b.starred ? "★" : ""}</p><p class="item-meta">${escapeHTML(b.date || "未定日期")} · ${escapeHTML(b.author || "未知作者")} · ${ownerText}</p></div><span class="pill">${statusText}</span></div>${quote}${notes ? `<p class="note">${escapeHTML(notes)}</p>` : ""}${b.tags ? `<p class="note"># ${escapeHTML(b.tags)}</p>` : ""}<div class="actions">${link}<button class="btn secondary" data-status="${b.id}" type="button">切换状态</button><button class="btn ghost" data-star="${b.id}" type="button">${b.starred ? "取消星标" : "星标"}</button><button class="btn ghost" data-edit="${b.id}" type="button">编辑</button><button class="btn danger" data-delete="${b.id}" type="button">删除</button></div></div>`;
+      }
+      function editBook(id) {
+        const b = books.find(x => x.id === id); if (!b) return;
+        els.editingId.value = b.id; els.titleInput.value = b.title || ""; els.authorInput.value = b.author || ""; els.statusInput.value = b.status || "reading"; els.ownerInput.value = b.owner || "together"; els.dateInput.value = b.date || todayTokyo(); els.linkInput.value = b.link || ""; els.quoteInput.value = b.quote || ""; els.luNoteInput.value = b.luNote || ""; els.brunoNoteInput.value = b.brunoNote || ""; els.tagsInput.value = b.tags || ""; els.saveBtn.textContent = "保存修改"; window.scrollTo({top:0, behavior:"smooth"});
+      }
+      function deleteBook(id) { if (!confirm("确定从书架移除这本书吗？")) return; books = books.filter(b => b.id !== id); save(); render(); toast("已从书架移除。"); }
+      function toggleStar(id) { const b = books.find(x => x.id === id); if (!b) return; b.starred = !b.starred; b.updatedAt = new Date().toISOString(); save(); render(); }
+      function cycleStatus(id) { const order = ["reading","read","want","paused"]; const b = books.find(x => x.id === id); if (!b) return; b.status = order[(order.indexOf(b.status) + 1) % order.length] || "reading"; b.updatedAt = new Date().toISOString(); save(); render(); }
+      function exportData() { const payload = {app:"brunolu", module:MODULE, version:VERSION, exportedAt:new Date().toISOString(), data:{books:sanitizeBooks(books)}}; downloadJSON(payload, `brunolu_reading_${todayTokyo().replaceAll("-","")}.json`); toast("书架 JSON 已导出。"); }
+      function importData(event) { const file = event.target.files?.[0]; event.target.value = ""; if (!file) return; if (!confirm("将覆盖当前书架数据，确定吗？")) return; const reader = new FileReader(); reader.onload = () => { try { const parsed = JSON.parse(String(reader.result || "")); validate(parsed); books = sanitizeBooks(parsed.data.books || []); save(); resetForm(); render(); toast("书架导入完成。"); } catch (e) { alert(`导入失败：${e.message}`); } }; reader.readAsText(file, "utf-8"); }
+      function validate(p) { if (!p || typeof p !== "object") throw new Error("JSON 顶层不是对象。"); if (p.app !== "brunolu") throw new Error("app 不匹配。"); if (p.module !== MODULE) throw new Error(`module 必须是 ${MODULE}。`); if (!p.data || typeof p.data !== "object") throw new Error("缺少 data 对象。"); }
+      function sanitizeBooks(items) { return Array.isArray(items) ? items.map(x => ({ id: String(x.id || cryptoId()), title: text(x.title,80), author: text(x.author,60), status: ["reading","read","want","paused"].includes(x.status) ? x.status : "reading", owner: ["lu","bruno","together"].includes(x.owner) ? x.owner : "together", date: sanitizeDate(x.date) || todayTokyo(), link: text(x.link,300), quote: text(x.quote,600), luNote: text(x.luNote,700), brunoNote: text(x.brunoNote,700), tags: text(x.tags,100), starred: Boolean(x.starred), updatedAt: text(x.updatedAt,60) })).filter(x => x.title) : []; }
+      function text(v,max) { return typeof v === "string" ? v.slice(0,max) : ""; }
+      function sanitizeDate(v) { return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : ""; }
+      function save() { localStorage.setItem(LS_KEY, JSON.stringify(sanitizeBooks(books))); }
+      function readJSON(key, fallback) { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch (_) { return fallback; } }
+      function downloadJSON(payload, filename) { const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"}); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+      function todayTokyo() { const parts = new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Tokyo", year:"numeric", month:"2-digit", day:"2-digit"}).formatToParts(new Date()); const g = t => parts.find(p => p.type === t)?.value; return `${g("year")}-${g("month")}-${g("day")}`; }
+      function cryptoId() { return `book_${Date.now()}_${Math.random().toString(36).slice(2,8)}`; }
+      function escapeHTML(v) { return String(v).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+      function escapeAttr(v) { return escapeHTML(v).replace(/'/g, "&#39;"); }
+      let toastTimer = null; function toast(t) { els.toast.textContent = t; els.toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600); }
+    })();
+
+  </script>
+</body>
+</html>

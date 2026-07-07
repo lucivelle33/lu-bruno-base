@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F2EA" />
+  <title>Bruno & Lu · 山野</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F7F2EA;
+      --card: #FFFDF8;
+      --ink: #3D3630;
+      --ink-soft: #8C8378;
+      --octopus: #E8734A;
+      --octopus-soft: #F5C9B5;
+      --night: #1E2233;
+      --star: #F2D98D;
+      --forest: #6B8F71;
+      --line: rgba(61, 54, 48, .12);
+      --shadow: 0 2px 12px rgba(61, 54, 48, .06);
+      --danger: #9b3b2f;
+      --ok: #4f7a58;
+      --max: 480px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: var(--cream);
+      color: var(--ink);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.8;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(107, 143, 113, .22), transparent 28%),
+        radial-gradient(circle at 88% 15%, rgba(242, 217, 141, .38), transparent 24%),
+        radial-gradient(circle at 46% 88%, rgba(232, 115, 74, .10), transparent 28%),
+        var(--cream);
+    }
+
+    a { color: inherit; }
+
+    button,
+    input,
+    textarea,
+    select { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    img { max-width: 100%; }
+
+    .app {
+      width: min(100%, var(--max));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 20px 16px 104px;
+      position: relative;
+    }
+
+    .hero {
+      padding: 18px 4px 18px;
+      text-align: center;
+    }
+
+    .mountain-mark {
+      width: 94px;
+      height: 54px;
+      margin: 0 auto 12px;
+      position: relative;
+      image-rendering: pixelated;
+    }
+
+    .mountain-mark::before,
+    .mountain-mark::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 58px;
+      height: 44px;
+      background: var(--forest);
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+      filter: drop-shadow(0 4px 0 rgba(61, 54, 48, .08));
+    }
+
+    .mountain-mark::before { left: 0; opacity: .82; }
+    .mountain-mark::after { right: 0; background: var(--octopus); transform: scale(.82); transform-origin: bottom right; }
+
+    .sun-dot {
+      position: absolute;
+      right: 10px;
+      top: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--star);
+      box-shadow: 0 0 0 5px rgba(242, 217, 141, .22);
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-weight: 900;
+      font-size: clamp(36px, 10vw, 46px);
+      line-height: 1.15;
+      letter-spacing: .38em;
+      padding-left: .38em; /* 抵消末字字距,保持视觉居中 */
+      color: var(--ink);
+    }
+
+    h1::after {
+      content: "";
+      display: block;
+      width: 2.2em;
+      height: 3px;
+      margin: 10px auto 0;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--forest), var(--octopus, #E8734A));
+      opacity: .85;
+    }
+
+    .hero-note {
+      margin: 9px auto 0;
+      max-width: 26em;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(61, 54, 48, .08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-family: "Noto Serif SC", serif;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .stat-pill {
+      min-height: 72px;
+      border-radius: 18px;
+      padding: 11px 8px;
+      text-align: center;
+      background: rgba(255, 250, 241, .86);
+      border: 1px solid var(--line);
+    }
+
+    .stat-pill strong {
+      display: block;
+      color: var(--forest);
+      font-family: "DotGothic16", monospace;
+      font-size: 26px;
+      line-height: 1.1;
+    }
+
+    .stat-pill span {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .chip {
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 999px;
+      background: rgba(61, 54, 48, .06);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      background: var(--forest);
+      color: var(--card);
+      box-shadow: 0 6px 18px rgba(107, 143, 113, .22);
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fffaf1;
+      color: var(--ink);
+      border-radius: 16px;
+      padding: 12px 14px;
+      outline: none;
+      min-height: 46px;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(107, 143, 113, .72);
+      box-shadow: 0 0 0 3px rgba(107, 143, 113, .14);
+    }
+
+    label {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 7px;
+    }
+
+    .field { margin-top: 12px; }
+
+    .two-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0 16px;
+      color: var(--card);
+      background: var(--forest);
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(107, 143, 113, .22);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn.secondary {
+      color: var(--ink);
+      background: rgba(107, 143, 113, .18);
+      box-shadow: none;
+    }
+
+    .btn.ghost {
+      color: var(--ink);
+      background: rgba(61, 54, 48, .06);
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: rgba(155, 59, 47, .12);
+      color: var(--danger);
+      box-shadow: none;
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .small-text {
+      margin: 8px 0 0;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .place-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .place-card {
+      border-radius: 22px;
+      padding: 16px;
+      background: rgba(255, 253, 248, .82);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .place-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .place-title {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-size: 21px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .place-region {
+      margin: 4px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .type-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      color: var(--card);
+      background: var(--forest);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .favorite-mark {
+      color: var(--octopus);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .stamp-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 2px 10px;
+      background: var(--forest);
+      color: var(--card);
+      font-family: "DotGothic16", monospace;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .02em;
+    }
+
+    .stamp.plan {
+      color: var(--forest);
+      background: transparent;
+      border: 1px solid rgba(107, 143, 113, .72);
+    }
+
+    .visit-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .visit-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 11px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255, 250, 241, .86);
+      border: 1px solid var(--line);
+    }
+
+    .visit-photo {
+      width: 72px;
+      height: 72px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(107, 143, 113, .18);
+      display: grid;
+      place-items: center;
+      color: var(--forest);
+      font-family: "DotGothic16", monospace;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .visit-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .visit-date {
+      margin: 0;
+      color: var(--forest);
+      font-family: "DotGothic16", monospace;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .visit-weather {
+      margin: 2px 0 0;
+      color: var(--ink-soft);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .visit-note {
+      margin: 5px 0 0;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 24px 8px;
+    }
+
+    .hidden { display: none !important; }
+
+    .message {
+      min-height: 42px;
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(107, 143, 113, .12);
+      color: var(--forest);
+      border: 1px solid rgba(107, 143, 113, .18);
+      font-size: 14px;
+    }
+
+    .message.error {
+      background: rgba(155, 59, 47, .10);
+      border-color: rgba(155, 59, 47, .20);
+      color: var(--danger);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: min(calc(100% - 24px), var(--max));
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, .88);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(61, 54, 48, .12);
+      z-index: 30;
+    }
+
+    .bottom-nav a {
+      min-height: 44px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .bottom-nav a span { font-size: 16px; line-height: 1; }
+
+    .bottom-nav a.active {
+      color: var(--forest);
+      background: rgba(107, 143, 113, .16);
+    }
+
+    .tiny-octo {
+      position: fixed;
+      right: 18px;
+      bottom: calc(max(10px, env(safe-area-inset-bottom)) + 76px);
+      width: 28px;
+      height: 24px;
+      background: var(--octopus);
+      border-radius: 12px 12px 8px 8px;
+      z-index: 20;
+      opacity: .85;
+      box-shadow:
+        -5px 17px 0 -8px var(--octopus),
+        0 17px 0 -8px var(--octopus),
+        5px 17px 0 -8px var(--octopus),
+        10px 17px 0 -8px var(--octopus);
+      transform-origin: center bottom;
+    }
+
+    .tiny-octo::before,
+    .tiny-octo::after {
+      content: "";
+      position: absolute;
+      top: 9px;
+      width: 3px;
+      height: 3px;
+      background: var(--night);
+    }
+
+    .tiny-octo::before { left: 8px; }
+    .tiny-octo::after { right: 8px; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(max(10px, env(safe-area-inset-bottom)) + 94px);
+      transform: translateX(-50%) translateY(10px);
+      width: min(calc(100% - 32px), 420px);
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(61, 54, 48, .94);
+      color: #FFFDF8;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 80;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 374px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .two-grid { grid-template-columns: 1fr; }
+      .place-head { grid-template-columns: 1fr; }
+      .visit-item { grid-template-columns: 1fr; }
+      .visit-photo { width: 100%; height: 160px; }
+    }
+
+    @media (min-width: 560px) {
+      .app { padding-inline: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="mountain-mark" aria-hidden="true"><div class="sun-dot"></div></div>
+      <p class="eyebrow">B R U N O&nbsp;&nbsp;&amp;&nbsp;&nbsp; L U</p>
+      <h1>山野</h1>
+      <p class="hero-note">山替我们记路,章替我们记年。</p>
+    </header>
+
+    <section class="stats-grid" aria-label="山野统计">
+      <div class="stat-pill"><strong id="placeCount">0</strong><span>个地方</span></div>
+      <div class="stat-pill"><strong id="revisitCount">0</strong><span>个回访地</span></div>
+      <div class="stat-pill"><strong id="tripCount">0</strong><span>次出行</span></div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">F I L T E R</p>
+      <h2 class="section-title">找一处山野</h2>
+      <div class="chips" role="list" aria-label="筛选类型">
+        <button class="chip active" data-filter="all" type="button">全部</button>
+        <button class="chip" data-filter="camp" type="button">⛺ 露营</button>
+        <button class="chip" data-filter="hike" type="button">🥾 徒步</button>
+        <button class="chip" data-filter="favorite" type="button">⭐ 老地方</button>
+      </div>
+      <label for="searchInput">搜索地名或地区</label>
+      <input id="searchInput" type="text" placeholder="例：静岡 / 田貫湖 / 山梨" />
+    </section>
+
+    <section class="place-list" id="placeList" aria-live="polite"></section>
+
+    <section class="card">
+      <p class="eyebrow">N E W&nbsp;&nbsp; P L A C E</p>
+      <h2 class="section-title" id="placeFormTitle">+ 新地方</h2>
+      <div class="field">
+        <label for="placeNameInput">地名 *</label>
+        <input id="placeNameInput" type="text" maxlength="80" placeholder="例：田貫湖キャンプ場" />
+      </div>
+      <div class="field two-grid">
+        <div>
+          <label for="regionInput">地区</label>
+          <input id="regionInput" type="text" maxlength="40" placeholder="例：静岡" />
+        </div>
+        <div>
+          <label for="typeInput">类型</label>
+          <select id="typeInput">
+            <option value="camp">⛺ 露营</option>
+            <option value="hike">🥾 徒步</option>
+            <option value="both">⛺🥾 都有</option>
+          </select>
+        </div>
+      </div>
+      <div class="field two-grid">
+        <div>
+          <label for="firstVisitInput">首次到访日期</label>
+          <input id="firstVisitInput" type="date" />
+          <p class="small-text">可留空。未来日期会显示为空心计划章。</p>
+        </div>
+        <div>
+          <label for="favoriteInput">老地方</label>
+          <select id="favoriteInput">
+            <option value="false">否</option>
+            <option value="true">⭐ 是</option>
+          </select>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="savePlaceBtn" type="button">保存地方</button>
+        <button class="btn ghost hidden" id="cancelEditPlaceBtn" type="button">取消编辑</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="visitFormCard">
+      <p class="eyebrow">S T A M P</p>
+      <h2 class="section-title" id="visitFormTitle">盖一个章</h2>
+      <div class="field two-grid">
+        <div>
+          <label for="visitDateInput">日期</label>
+          <input id="visitDateInput" type="date" />
+        </div>
+        <div>
+          <label for="weatherInput">天气</label>
+          <input id="weatherInput" type="text" maxlength="28" placeholder="例：晴 / 雨 / 湖边风大" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="photoInput">照片链接</label>
+        <input id="photoInput" type="url" inputmode="url" placeholder="https://..." />
+        <p class="small-text">传到仓库的图片是公开的；私密照片不要放进公开仓库链接里。</p>
+      </div>
+      <div class="field">
+        <label for="noteInput">一句话</label>
+        <textarea id="noteInput" maxlength="500" placeholder="记录这一次山野的小片段。"></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn" id="saveVisitBtn" type="button">保存这一章</button>
+        <button class="btn ghost" id="cancelVisitBtn" type="button">取消</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">B A C K U P</p>
+      <h2 class="section-title">导出 / 导入</h2>
+      <p class="small-text">导出包含山野地点与到访记录，不包含图片本体，只包含图片链接。</p>
+      <div class="actions">
+        <button class="btn" id="exportBtn" type="button">导出 JSON</button>
+        <label class="btn secondary" for="importFile" role="button">导入 JSON</label>
+        <input class="hidden" id="importFile" type="file" accept="application/json,.json" />
+        <button class="btn danger" id="clearAllBtn" type="button">清空本页数据</button>
+      </div>
+      <div class="message hidden" id="importStatus" role="status"></div>
+    </section>
+
+    <p class="small-text">数据仅保存在本机浏览器，不会上传；但 localStorage 不是加密保险柜，共用设备请注意。</p>
+  </main>
+
+  <nav class="bottom-nav" aria-label="底部导航">
+    <a href="home.html"><span>🏠</span>家</a>
+    <a href="observatory.html"><span>🌌</span>星空</a>
+    <a href="crosstalk.html"><span>♪</span>歌</a>
+    <a href="reading.html"><span>📚</span>书</a>
+    <a href="gallery.html"><span>🖼️</span>画</a>
+    <a href="sanye.html" class="active" aria-current="page"><span>⛰️</span>山</a>
+    <a href="chat.html"><span>💬</span>聊</a>
+  </nav>
+
+  <div class="tiny-octo" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const MODULE = "outdoors";
+      const VERSION = 1;
+      const LS_KEY = "brunolu_outdoors";
+      const SEED_PLACES = [
+        {
+          id: "seed_tanukiko_20260718",
+          name: "田貫湖キャンプ場",
+          region: "静岡",
+          type: "camp",
+          favorite: false,
+          lat: null,
+          lng: null,
+          visits: [{ id: "seed_tanukiko_visit_20260718", date: "2026-07-18", weather: "", note: "", photo: "" }]
+        },
+        {
+          id: "seed_saiko_20260725",
+          name: "西湖キャンプ場",
+          region: "山梨",
+          type: "camp",
+          favorite: false,
+          lat: null,
+          lng: null,
+          visits: [{ id: "seed_saiko_visit_20260725", date: "2026-07-25", weather: "", note: "", photo: "" }]
+        }
+      ];
+
+      const FALLBACK_IMAGE = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+          <rect width="600" height="600" fill="#F7F2EA"/>
+          <circle cx="440" cy="150" r="42" fill="#F2D98D"/>
+          <path d="M50 470 L230 170 L410 470 Z" fill="#6B8F71" opacity=".86"/>
+          <path d="M210 470 L360 240 L540 470 Z" fill="#E8734A" opacity=".78"/>
+          <text x="300" y="525" text-anchor="middle" fill="#8C8378" font-family="serif" font-size="28">Bruno &amp; Lu Outdoors</text>
+        </svg>
+      `);
+
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        placeCount: $("placeCount"),
+        revisitCount: $("revisitCount"),
+        tripCount: $("tripCount"),
+        searchInput: $("searchInput"),
+        placeList: $("placeList"),
+        placeFormTitle: $("placeFormTitle"),
+        placeNameInput: $("placeNameInput"),
+        regionInput: $("regionInput"),
+        typeInput: $("typeInput"),
+        firstVisitInput: $("firstVisitInput"),
+        favoriteInput: $("favoriteInput"),
+        savePlaceBtn: $("savePlaceBtn"),
+        cancelEditPlaceBtn: $("cancelEditPlaceBtn"),
+        visitFormCard: $("visitFormCard"),
+        visitFormTitle: $("visitFormTitle"),
+        visitDateInput: $("visitDateInput"),
+        weatherInput: $("weatherInput"),
+        photoInput: $("photoInput"),
+        noteInput: $("noteInput"),
+        saveVisitBtn: $("saveVisitBtn"),
+        cancelVisitBtn: $("cancelVisitBtn"),
+        exportBtn: $("exportBtn"),
+        importFile: $("importFile"),
+        clearAllBtn: $("clearAllBtn"),
+        importStatus: $("importStatus"),
+        toast: $("toast")
+      };
+
+      let state = loadInitialState();
+      let activeFilter = "all";
+      let editingPlaceId = "";
+      let activeVisitPlaceId = "";
+
+      init();
+
+      function init() {
+        bindEvents();
+        render();
+      }
+
+      function loadInitialState() {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw === null) {
+          const seeded = { places: SEED_PLACES };
+          localStorage.setItem(LS_KEY, JSON.stringify(seeded));
+          return sanitizeData(seeded);
+        }
+        return sanitizeData(readJSON(LS_KEY, { places: [] }));
+      }
+
+      function bindEvents() {
+        document.querySelectorAll(".chip").forEach(button => {
+          button.addEventListener("click", () => {
+            activeFilter = button.dataset.filter || "all";
+            document.querySelectorAll(".chip").forEach(chip => chip.classList.toggle("active", chip === button));
+            renderList();
+          });
+        });
+        els.searchInput.addEventListener("input", renderList);
+        els.savePlaceBtn.addEventListener("click", savePlace);
+        els.cancelEditPlaceBtn.addEventListener("click", resetPlaceForm);
+        els.saveVisitBtn.addEventListener("click", saveVisit);
+        els.cancelVisitBtn.addEventListener("click", resetVisitForm);
+        els.exportBtn.addEventListener("click", exportData);
+        els.importFile.addEventListener("change", importData);
+        els.clearAllBtn.addEventListener("click", clearAllData);
+      }
+
+      function render() {
+        renderStats();
+        renderList();
+      }
+
+      function renderStats() {
+        const today = getTokyoToday();
+        const places = state.places || [];
+        const revisitCount = places.filter(place => (place.visits || []).length >= 2).length;
+        const tripCount = places.reduce((sum, place) => sum + (place.visits || []).filter(visit => !isFuture(visit.date, today)).length, 0);
+        els.placeCount.textContent = String(places.length);
+        els.revisitCount.textContent = String(revisitCount);
+        els.tripCount.textContent = String(tripCount);
+      }
+
+      function renderList() {
+        renderStats();
+        const query = els.searchInput.value.trim().toLowerCase();
+        const items = state.places
+          .filter(place => matchFilter(place, activeFilter))
+          .filter(place => !query || `${place.name} ${place.region}`.toLowerCase().includes(query))
+          .sort(sortPlacesByLatestVisit);
+
+        if (!items.length) {
+          els.placeList.innerHTML = `<section class="card empty-state">还没有符合条件的山野。点下面「+ 新地方」，先把第一处地方钉到墙上。</section>`;
+          return;
+        }
+
+        els.placeList.innerHTML = items.map(renderPlaceCard).join("");
+        bindListActions();
+      }
+
+      function matchFilter(place, filter) {
+        if (filter === "all") return true;
+        if (filter === "favorite") return Boolean(place.favorite);
+        if (filter === "camp") return place.type === "camp" || place.type === "both";
+        if (filter === "hike") return place.type === "hike" || place.type === "both";
+        return true;
+      }
+
+      function sortPlacesByLatestVisit(a, b) {
+        return latestDate(b).localeCompare(latestDate(a));
+      }
+
+      function latestDate(place) {
+        const dates = (place.visits || []).map(visit => visit.date).filter(Boolean).sort();
+        return dates.length ? dates[dates.length - 1] : "0000-00-00";
+      }
+
+      function renderPlaceCard(place) {
+        const visits = [...(place.visits || [])].sort((a, b) => b.date.localeCompare(a.date));
+        const revisitMark = visits.length >= 2 ? `<span class="favorite-mark">×${visits.length}</span>` : "";
+        const favorite = place.favorite ? `<span class="favorite-mark">⭐ 老地方</span>` : "";
+        const stampHtml = visits.length
+          ? `<div class="stamp-row">${visits.map(visit => renderStamp(visit)).join("")}</div>`
+          : `<p class="small-text">还没有盖章。可以先把计划日期盖上去。</p>`;
+        const visitHtml = visits.length
+          ? `<div class="visit-list">${visits.map(visit => renderVisitItem(visit)).join("")}</div>`
+          : "";
+
+        return `
+          <article class="place-card" data-place-id="${escapeAttribute(place.id)}">
+            <div class="place-head">
+              <div>
+                <h2 class="place-title">${escapeHTML(place.name)} ${revisitMark}</h2>
+                <p class="place-region">${escapeHTML(place.region || "未填写地区")} ${favorite}</p>
+              </div>
+              <span class="type-chip">${typeLabel(place.type)}</span>
+            </div>
+            ${stampHtml}
+            ${visitHtml}
+            <div class="actions">
+              <button class="btn" type="button" data-add-visit="${escapeAttribute(place.id)}">+ 盖一个章</button>
+              <button class="btn secondary" type="button" data-edit-place="${escapeAttribute(place.id)}">编辑地点</button>
+              <button class="btn danger" type="button" data-delete-place="${escapeAttribute(place.id)}">删除</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderStamp(visit) {
+        const future = isFuture(visit.date, getTokyoToday());
+        const label = `${stampLabel(visit.date)}${future ? " · 计划" : ""}`;
+        return `<span class="stamp ${future ? "plan" : ""}">${escapeHTML(label)}</span>`;
+      }
+
+      function stampLabel(date) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return "未定";
+        const [year, month] = date.split("-");
+        const currentYear = getTokyoToday().slice(0, 4);
+        return year === currentYear ? `'${year.slice(2)}.${Number(month)}` : year;
+      }
+
+      function renderVisitItem(visit) {
+        const safePhoto = safeURL(visit.photo);
+        const photo = safePhoto
+          ? `<a class="visit-photo" href="${escapeAttribute(safePhoto)}" target="_blank" rel="noopener noreferrer"><img src="${escapeAttribute(safePhoto)}" loading="lazy" alt="山野照片" onerror="this.src='${FALLBACK_IMAGE}'" /></a>`
+          : `<div class="visit-photo">NO<br>PHOTO</div>`;
+        const plan = isFuture(visit.date, getTokyoToday()) ? " · 计划" : "";
+        return `
+          <div class="visit-item">
+            ${photo}
+            <div>
+              <p class="visit-date">${escapeHTML(visit.date || "未定")}${plan}</p>
+              <p class="visit-weather">${escapeHTML(visit.weather || "天气未写")}</p>
+              <p class="visit-note">${escapeHTML(visit.note || "还没有写一句话。")}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function bindListActions() {
+        els.placeList.querySelectorAll("[data-add-visit]").forEach(button => {
+          button.addEventListener("click", () => openVisitForm(button.dataset.addVisit));
+        });
+        els.placeList.querySelectorAll("[data-edit-place]").forEach(button => {
+          button.addEventListener("click", () => editPlace(button.dataset.editPlace));
+        });
+        els.placeList.querySelectorAll("[data-delete-place]").forEach(button => {
+          button.addEventListener("click", () => deletePlace(button.dataset.deletePlace));
+        });
+      }
+
+      function savePlace() {
+        const name = els.placeNameInput.value.trim();
+        if (!name) {
+          toast("地名必须填写。山野墙不能钉一枚空钉子。");
+          return;
+        }
+        const region = els.regionInput.value.trim();
+        const type = sanitizeType(els.typeInput.value);
+        const favorite = els.favoriteInput.value === "true";
+        const firstVisitDate = els.firstVisitInput.value;
+
+        if (editingPlaceId) {
+          const place = findPlace(editingPlaceId);
+          if (!place) return;
+          place.name = name;
+          place.region = region;
+          place.type = type;
+          place.favorite = favorite;
+          saveState();
+          resetPlaceForm();
+          render();
+          toast("地点已更新。");
+          return;
+        }
+
+        const place = {
+          id: createId("place"),
+          name,
+          region,
+          type,
+          favorite,
+          lat: null,
+          lng: null,
+          visits: []
+        };
+        if (firstVisitDate) {
+          place.visits.push({ id: createId("visit"), date: firstVisitDate, weather: "", note: "", photo: "" });
+        }
+        state.places.push(place);
+        saveState();
+        resetPlaceForm();
+        render();
+        toast("新地方已钉到山野墙上。");
+      }
+
+      function editPlace(id) {
+        const place = findPlace(id);
+        if (!place) return;
+        editingPlaceId = id;
+        els.placeFormTitle.textContent = "编辑地点";
+        els.placeNameInput.value = place.name;
+        els.regionInput.value = place.region;
+        els.typeInput.value = place.type;
+        els.favoriteInput.value = String(Boolean(place.favorite));
+        els.firstVisitInput.value = "";
+        els.firstVisitInput.disabled = true;
+        els.savePlaceBtn.textContent = "保存修改";
+        els.cancelEditPlaceBtn.classList.remove("hidden");
+        els.placeNameInput.focus({ preventScroll: false });
+      }
+
+      function resetPlaceForm() {
+        editingPlaceId = "";
+        els.placeFormTitle.textContent = "+ 新地方";
+        els.placeNameInput.value = "";
+        els.regionInput.value = "";
+        els.typeInput.value = "camp";
+        els.favoriteInput.value = "false";
+        els.firstVisitInput.value = "";
+        els.firstVisitInput.disabled = false;
+        els.savePlaceBtn.textContent = "保存地方";
+        els.cancelEditPlaceBtn.classList.add("hidden");
+      }
+
+      function openVisitForm(id) {
+        const place = findPlace(id);
+        if (!place) return;
+        activeVisitPlaceId = id;
+        els.visitFormTitle.textContent = `给 ${place.name} 盖一个章`;
+        els.visitDateInput.value = getTokyoToday();
+        els.weatherInput.value = "";
+        els.photoInput.value = "";
+        els.noteInput.value = "";
+        els.visitFormCard.classList.remove("hidden");
+        els.visitDateInput.focus({ preventScroll: false });
+      }
+
+      function saveVisit() {
+        const place = findPlace(activeVisitPlaceId);
+        if (!place) return;
+        const date = els.visitDateInput.value || getTokyoToday();
+        place.visits.push({
+          id: createId("visit"),
+          date,
+          weather: els.weatherInput.value.trim(),
+          note: els.noteInput.value.trim(),
+          photo: safeURL(els.photoInput.value.trim())
+        });
+        saveState();
+        resetVisitForm();
+        render();
+        toast("这一章盖好了。");
+      }
+
+      function resetVisitForm() {
+        activeVisitPlaceId = "";
+        els.visitFormCard.classList.add("hidden");
+        els.visitFormTitle.textContent = "盖一个章";
+        els.visitDateInput.value = "";
+        els.weatherInput.value = "";
+        els.photoInput.value = "";
+        els.noteInput.value = "";
+      }
+
+      function deletePlace(id) {
+        const place = findPlace(id);
+        if (!place) return;
+        const visitCount = (place.visits || []).length;
+        const text = `确定删除「${place.name}」吗？这会将这个地点连同 ${visitCount} 次记录一起删除，无法撤回。`;
+        if (!confirm(text)) return;
+        state.places = state.places.filter(item => item.id !== id);
+        saveState();
+        render();
+        toast("地点已删除。");
+      }
+
+      function exportData() {
+        const payload = {
+          app: "brunolu",
+          module: MODULE,
+          version: VERSION,
+          exportedAt: new Date().toISOString(),
+          data: sanitizeData(state)
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `brunolu_outdoors_${getTokyoToday().replaceAll("-", "")}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toast("山野 JSON 已导出。");
+      }
+
+      function importData(event) {
+        const file = event.target.files?.[0];
+        event.target.value = "";
+        if (!file) return;
+        if (!confirm("将覆盖当前山野地点和到访记录，确定吗？")) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(String(reader.result || ""));
+            validateImport(parsed);
+            state = sanitizeData(parsed.data || { places: [] });
+            saveState();
+            resetPlaceForm();
+            resetVisitForm();
+            render();
+            setImportStatus("导入完成。山野墙已经换好标签。", "");
+          } catch (error) {
+            setImportStatus(`导入失败：${error.message}`, "error");
+            alert(`导入失败：${error.message}`);
+          }
+        };
+        reader.onerror = () => alert("导入失败：无法读取文件。");
+        reader.readAsText(file, "utf-8");
+      }
+
+      function validateImport(payload) {
+        if (!payload || typeof payload !== "object") throw new Error("JSON 顶层不是对象。");
+        if (payload.app !== "brunolu") throw new Error("app 不匹配，必须是 brunolu。");
+        if (payload.module !== MODULE) throw new Error(`module 不匹配，必须是 ${MODULE}。`);
+        if (!payload.data || typeof payload.data !== "object") throw new Error("缺少 data 对象。");
+      }
+
+      function clearAllData() {
+        if (!confirm("确定清空本页全部山野数据吗？这不会删除导出的 JSON 备份，但会清空当前浏览器里的地点和章。")) return;
+        state = { places: [] };
+        saveState();
+        resetPlaceForm();
+        resetVisitForm();
+        render();
+        toast("山野墙已清空。需要时可以从 JSON 导入恢复。");
+      }
+
+      function setImportStatus(text, type) {
+        els.importStatus.className = `message ${type || ""}`.trim();
+        els.importStatus.textContent = text;
+        els.importStatus.classList.remove("hidden");
+      }
+
+      function findPlace(id) {
+        return state.places.find(place => place.id === id);
+      }
+
+      function saveState() {
+        localStorage.setItem(LS_KEY, JSON.stringify(sanitizeData(state)));
+      }
+
+      function sanitizeData(value) {
+        const source = value && typeof value === "object" ? value : {};
+        const places = Array.isArray(source.places) ? source.places : [];
+        return {
+          places: places.map(sanitizePlace).filter(place => place.name)
+        };
+      }
+
+      function sanitizePlace(place) {
+        const visits = Array.isArray(place?.visits) ? place.visits : [];
+        return {
+          id: typeof place?.id === "string" && place.id ? place.id : createId("place"),
+          name: sanitizeText(place?.name, 80),
+          region: sanitizeText(place?.region, 40),
+          type: sanitizeType(place?.type),
+          favorite: Boolean(place?.favorite),
+          lat: Number.isFinite(Number(place?.lat)) ? Number(place.lat) : null,
+          lng: Number.isFinite(Number(place?.lng)) ? Number(place.lng) : null,
+          visits: visits.map(sanitizeVisit).filter(visit => visit.date).sort((a, b) => a.date.localeCompare(b.date))
+        };
+      }
+
+      function sanitizeVisit(visit) {
+        return {
+          id: typeof visit?.id === "string" && visit.id ? visit.id : createId("visit"),
+          date: sanitizeDate(visit?.date) || getTokyoToday(),
+          weather: sanitizeText(visit?.weather, 28),
+          note: sanitizeText(visit?.note, 500),
+          photo: safeURL(sanitizeText(visit?.photo, 500))
+        };
+      }
+
+      function sanitizeText(value, max) {
+        return typeof value === "string" ? value.slice(0, max) : "";
+      }
+
+      function sanitizeType(value) {
+        return ["camp", "hike", "both"].includes(value) ? value : "camp";
+      }
+
+      function sanitizeDate(value) {
+        return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : "";
+      }
+
+      function typeLabel(type) {
+        if (type === "hike") return "🥾 徒步";
+        if (type === "both") return "⛺🥾 都有";
+        return "⛺ 露营";
+      }
+
+      function safeURL(value) {
+        const text = String(value || "").trim();
+        if (!text) return "";
+        try {
+          const url = new URL(text, window.location.href);
+          if (["http:", "https:"].includes(url.protocol)) return url.href;
+        } catch (_) {}
+        return "";
+      }
+
+      function isFuture(date, today) {
+        return sanitizeDate(date).localeCompare(today) > 0;
+      }
+
+      function readJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (_) {
+          return fallback;
+        }
+      }
+
+      function createId(prefix) {
+        const cryptoObj = window.crypto || window.msCrypto;
+        if (cryptoObj && typeof cryptoObj.randomUUID === "function") return `${prefix}_${cryptoObj.randomUUID()}`;
+        return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+      }
+
+      let toastTimer = null;
+      function toast(text) {
+        els.toast.textContent = text;
+        els.toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
+      }
+
+      function getTokyoToday() {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Tokyo",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).formatToParts(new Date());
+        const get = (type) => parts.find(part => part.type === type)?.value;
+        return `${get("year")}-${get("month")}-${get("day")}`;
+      }
+
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"]/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;"
+        }[char]));
+      }
+
+      function escapeAttribute(value) {
+        return escapeHTML(value).replace(/'/g, "&#39;");
+      }
+    })();
+  </script>
+</body>
+</html>

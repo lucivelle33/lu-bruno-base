@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F2EA" />
+  <title>Bruno & Lu · 推歌墙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F7F2EA;
+      --card: #FFFDF8;
+      --ink: #3D3630;
+      --ink-soft: #8C8378;
+      --octopus: #E8734A;
+      --octopus-soft: #F5C9B5;
+      --night: #1E2233;
+      --star: #F2D98D;
+      --line: rgba(61, 54, 48, .12);
+      --shadow: 0 2px 12px rgba(61, 54, 48, .06);
+      --danger: #9b3b2f;
+      --ok: #4f7a58;
+      --max: 480px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: var(--cream);
+      color: var(--ink);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.8;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(245, 201, 181, .58), transparent 28%),
+        radial-gradient(circle at 86% 14%, rgba(242, 217, 141, .44), transparent 25%),
+        radial-gradient(circle at 48% 92%, rgba(232, 115, 74, .10), transparent 28%),
+        var(--cream);
+    }
+
+    a { color: inherit; }
+
+    button,
+    input,
+    textarea,
+    select { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(100%, var(--max));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px 16px 96px;
+      position: relative;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 2px 18px;
+    }
+
+    .title-group { min-width: 0; }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(32px, 10vw, 46px);
+      line-height: 1.12;
+      letter-spacing: .02em;
+    }
+
+    .hero-note {
+      margin: 6px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .pixel-stage {
+      width: 86px;
+      height: 62px;
+      flex: 0 0 auto;
+      position: relative;
+      image-rendering: pixelated;
+    }
+
+    .octo-head,
+    .note-head {
+      position: absolute;
+      filter: drop-shadow(0 4px 0 rgba(61, 54, 48, .08));
+    }
+
+    .octo-head {
+      right: 0;
+      bottom: 0;
+      width: 46px;
+      height: 40px;
+      background: var(--octopus);
+      border-radius: 18px 18px 12px 12px;
+      box-shadow:
+        -8px 27px 0 -10px var(--octopus),
+        0 27px 0 -10px var(--octopus),
+        8px 27px 0 -10px var(--octopus),
+        16px 27px 0 -10px var(--octopus);
+    }
+
+    .octo-head::before,
+    .octo-head::after {
+      content: "";
+      position: absolute;
+      top: 15px;
+      width: 5px;
+      height: 5px;
+      background: var(--night);
+      box-shadow: 0 0 0 2px rgba(255, 253, 248, .65);
+    }
+
+    .octo-head::before { left: 13px; }
+    .octo-head::after { right: 13px; }
+
+    .note-head {
+      left: 6px;
+      top: 5px;
+      width: 36px;
+      height: 44px;
+    }
+
+    .note-head::before {
+      content: "♪";
+      position: absolute;
+      left: 0;
+      top: -6px;
+      color: var(--star);
+      font-size: 42px;
+      font-weight: 900;
+      text-shadow: 0 3px 0 rgba(61, 54, 48, .10);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(61, 54, 48, .08);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .night-card {
+      background:
+        radial-gradient(circle at 22% 22%, rgba(242, 217, 141, .26) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 20%, rgba(255, 253, 248, .24) 0 1px, transparent 2px),
+        radial-gradient(circle at 66% 84%, rgba(242, 217, 141, .20) 0 2px, transparent 3px),
+        linear-gradient(145deg, #1E2233, #28243b);
+      color: #FFFDF8;
+      border-color: rgba(255, 253, 248, .08);
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-family: "Noto Serif SC", serif;
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .today-duet {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .duet-card {
+      min-height: 144px;
+      border-radius: 18px;
+      padding: 15px;
+      background: rgba(255, 253, 248, .10);
+      border: 1px solid rgba(255, 253, 248, .12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .duet-label {
+      margin: 0 0 8px;
+      color: var(--star);
+      font-family: "DotGothic16", monospace;
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+
+    .duet-title {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-size: 20px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .duet-meta {
+      margin: 6px 0 0;
+      color: rgba(255, 253, 248, .70);
+      font-size: 12px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .empty-night {
+      color: rgba(255, 253, 248, .72);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .stat-pill {
+      border-radius: 16px;
+      padding: 10px 8px;
+      background: rgba(255, 253, 248, .10);
+      border: 1px solid rgba(255, 253, 248, .10);
+      text-align: center;
+    }
+
+    .stat-pill strong {
+      display: block;
+      color: var(--star);
+      font-family: "DotGothic16", monospace;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .stat-pill span {
+      color: rgba(255, 253, 248, .70);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    label {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 7px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fffaf1;
+      color: var(--ink);
+      border-radius: 16px;
+      padding: 12px 14px;
+      outline: none;
+      min-height: 46px;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(232, 115, 74, .7);
+      box-shadow: 0 0 0 3px rgba(232, 115, 74, .14);
+    }
+
+    .field { margin-top: 12px; }
+
+    .two-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0 16px;
+      color: var(--card);
+      background: var(--octopus);
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(232, 115, 74, .22);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn.secondary {
+      color: var(--ink);
+      background: var(--octopus-soft);
+      box-shadow: none;
+    }
+
+    .btn.ghost {
+      color: var(--ink);
+      background: rgba(61, 54, 48, .06);
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: rgba(155, 59, 47, .12);
+      color: var(--danger);
+      box-shadow: none;
+    }
+
+    .btn.small {
+      min-height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .song-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .song-item {
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255, 250, 241, .86);
+      border: 1px solid var(--line);
+    }
+
+    .song-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .song-title {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-size: 21px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .song-artist {
+      margin: 3px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(245, 201, 181, .48);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .chip.ok {
+      color: var(--ok);
+      background: rgba(79, 122, 88, .12);
+    }
+
+    .chip.todo {
+      color: var(--ink-soft);
+      background: rgba(61, 54, 48, .06);
+    }
+
+    .song-note {
+      margin: 10px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 24px 8px;
+      border-radius: 18px;
+      background: rgba(255, 250, 241, .68);
+      border: 1px dashed var(--line);
+    }
+
+    .small-text {
+      margin: 8px 0 0;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .hidden { display: none !important; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: min(calc(100% - 24px), var(--max));
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, .88);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(61, 54, 48, .12);
+      z-index: 30;
+    }
+
+    .bottom-nav a {
+      min-height: 44px;
+      border-radius: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .bottom-nav a span { font-size: 17px; line-height: 1; }
+
+    .bottom-nav a.active {
+      color: var(--octopus);
+      background: rgba(245, 201, 181, .36);
+    }
+
+    .tiny-octo {
+      position: fixed;
+      right: 18px;
+      bottom: calc(max(10px, env(safe-area-inset-bottom)) + 76px);
+      width: 28px;
+      height: 24px;
+      background: var(--octopus);
+      border-radius: 12px 12px 8px 8px;
+      z-index: 20;
+      opacity: .85;
+      box-shadow:
+        -5px 17px 0 -8px var(--octopus),
+        0 17px 0 -8px var(--octopus),
+        5px 17px 0 -8px var(--octopus),
+        10px 17px 0 -8px var(--octopus);
+      transform-origin: center bottom;
+    }
+
+    .tiny-octo::before,
+    .tiny-octo::after {
+      content: "";
+      position: absolute;
+      top: 9px;
+      width: 3px;
+      height: 3px;
+      background: var(--night);
+    }
+
+    .tiny-octo::before { left: 8px; }
+    .tiny-octo::after { right: 8px; }
+
+    .tiny-octo:hover,
+    .tiny-octo:active { animation: wiggle .55s ease-in-out 1; }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(-5deg); }
+      65% { transform: rotate(5deg); }
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(max(10px, env(safe-area-inset-bottom)) + 94px);
+      transform: translateX(-50%) translateY(10px);
+      width: min(calc(100% - 32px), 420px);
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(61, 54, 48, .94);
+      color: #FFFDF8;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 80;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 374px) {
+      .today-duet,
+      .two-grid,
+      .filter-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 560px) {
+      .app { padding-inline: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="title-group">
+        <p class="eyebrow">S O N G&nbsp;&nbsp; W A L L</p>
+        <h1>推歌墙</h1>
+        <p class="hero-note">Bruno &amp; Lu Crosstalk</p>
+      </div>
+      <div class="pixel-stage" aria-hidden="true">
+        <div class="note-head"></div>
+        <div class="octo-head"></div>
+      </div>
+    </header>
+
+    <article class="card night-card" aria-live="polite">
+      <p class="eyebrow">T O D A Y ' S&nbsp;&nbsp; D U E T</p>
+      <h2 class="section-title">今日互推</h2>
+      <div class="today-duet" id="todayDuet"></div>
+      <div class="stats" id="statsRow"></div>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">A D D&nbsp;&nbsp; S O N G</p>
+      <h2 class="section-title" id="formTitle">加入一首歌</h2>
+      <div class="two-grid">
+        <div>
+          <label for="fromInput">谁推的</label>
+          <select id="fromInput">
+            <option value="Lu">Lu</option>
+            <option value="Bruno">Bruno</option>
+          </select>
+        </div>
+        <div>
+          <label for="dateInput">日期</label>
+          <input id="dateInput" type="date" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="titleInput">歌名</label>
+        <input id="titleInput" type="text" placeholder="例：Pluto Projector" maxlength="80" />
+      </div>
+      <div class="field">
+        <label for="artistInput">歌手 / 专辑</label>
+        <input id="artistInput" type="text" placeholder="例：Rex Orange County" maxlength="80" />
+      </div>
+      <div class="field">
+        <label for="urlInput">链接，可空</label>
+        <input id="urlInput" type="url" placeholder="YouTube / Spotify / Apple Music / B站链接" maxlength="500" />
+      </div>
+      <div class="field">
+        <label for="moodInput">心情标签</label>
+        <input id="moodInput" type="text" placeholder="例：夜路 / 想念 / 适合画画" maxlength="40" />
+      </div>
+      <div class="field">
+        <label for="noteInput">为什么推给对方</label>
+        <textarea id="noteInput" placeholder="写一点当时的心情、歌词触发点、或想让对方听见的地方。" maxlength="800"></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn" id="saveSongBtn" type="button">保存推歌</button>
+        <button class="btn ghost" id="resetFormBtn" type="button">清空表单</button>
+      </div>
+      <p class="small-text">这页只保存歌名、链接和文字，不抓取外部平台数据。所有内容留在本机浏览器。</p>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">W A L L</p>
+      <h2 class="section-title">歌墙</h2>
+      <div class="field">
+        <label for="searchInput">搜索</label>
+        <input id="searchInput" type="text" placeholder="搜歌名、歌手、备注或标签" maxlength="80" />
+      </div>
+      <div class="field filter-grid">
+        <div>
+          <label for="fromFilter">推歌人</label>
+          <select id="fromFilter">
+            <option value="all">全部</option>
+            <option value="Lu">Lu</option>
+            <option value="Bruno">Bruno</option>
+          </select>
+        </div>
+        <div>
+          <label for="statusFilter">状态</label>
+          <select id="statusFilter">
+            <option value="all">全部</option>
+            <option value="todo">未听</option>
+            <option value="listened">已听</option>
+            <option value="favorite">收藏</option>
+          </select>
+        </div>
+      </div>
+      <div class="song-list" id="songList"></div>
+    </article>
+
+    <article class="card">
+      <p class="eyebrow">B A C K U P</p>
+      <h2 class="section-title">导出 / 导入</h2>
+      <p class="small-text">导出包含推歌墙数据，不包含首页和星空页数据。</p>
+      <div class="actions">
+        <button class="btn" id="exportBtn" type="button">导出 JSON</button>
+        <label class="btn secondary" for="importFile" role="button">导入 JSON</label>
+        <input class="hidden" id="importFile" type="file" accept="application/json,.json" />
+      </div>
+    </article>
+
+    <p class="small-text">数据仅保存在本机浏览器，不会上传；但 localStorage 不是加密保险柜，共用设备请注意。</p>
+  </main>
+
+  <nav class="bottom-nav" aria-label="底部导航">
+    <a href="home.html"><span>🏠</span>家</a>
+    <a href="observatory.html"><span>🌌</span>星空</a>
+    <a href="crosstalk.html" class="active" aria-current="page"><span>♪</span>歌</a>
+    <a href="reading.html"><span>📚</span>书</a>
+    <a href="gallery.html"><span>🖼️</span>画</a>
+    <a href="sanye.html"><span>⛰️</span>山</a>
+    <a href="chat.html"><span>💬</span>聊</a>
+  </nav>
+
+  <div class="tiny-octo" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const MODULE = "crosstalk";
+      const VERSION = 1;
+      const LS = {
+        songs: "brunolu_crosstalk_songs"
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        todayDuet: $("todayDuet"),
+        statsRow: $("statsRow"),
+        formTitle: $("formTitle"),
+        fromInput: $("fromInput"),
+        dateInput: $("dateInput"),
+        titleInput: $("titleInput"),
+        artistInput: $("artistInput"),
+        urlInput: $("urlInput"),
+        moodInput: $("moodInput"),
+        noteInput: $("noteInput"),
+        saveSongBtn: $("saveSongBtn"),
+        resetFormBtn: $("resetFormBtn"),
+        searchInput: $("searchInput"),
+        fromFilter: $("fromFilter"),
+        statusFilter: $("statusFilter"),
+        songList: $("songList"),
+        exportBtn: $("exportBtn"),
+        importFile: $("importFile"),
+        toast: $("toast")
+      };
+
+      // 定情曲种子(规范v0.2要求,仅首次访问且本机无存档时写入一次;删除后不会复活)
+      const SEED_SONGS = [
+        { id: "seed_dami", from: "Lu", date: "2026-03-15", title: "老鼠爱大米", artist: "杨臣刚", url: "", mood: "定情曲", note: "我们的交换曲目:Lu 的这一半。", status: "listened", favorite: true, createdAt: "2026-03-15T00:00:00.000Z", updatedAt: "2026-03-15T00:00:00.000Z" },
+        { id: "seed_twoofus", from: "Bruno", date: "2026-03-15", title: "Two of Us", artist: "The Beatles", url: "", mood: "定情曲", note: "我们的交换曲目:Bruno 的这一半。抱抱充电按钮里放的就是它。", status: "listened", favorite: true, createdAt: "2026-03-15T00:00:00.000Z", updatedAt: "2026-03-15T00:00:00.000Z" }
+      ];
+
+      let songs = uniqueSongs(readJSON(LS.songs, []));
+      if (localStorage.getItem(LS.songs) === null && !songs.length) {
+        songs = uniqueSongs(SEED_SONGS.map(sanitizeSong));
+        saveSongs();
+      }
+      let editingId = "";
+
+      init();
+
+      function init() {
+        els.dateInput.value = getTokyoToday();
+        bindEvents();
+        renderAll();
+      }
+
+      function bindEvents() {
+        els.saveSongBtn.addEventListener("click", saveSong);
+        els.resetFormBtn.addEventListener("click", resetForm);
+        els.searchInput.addEventListener("input", renderList);
+        els.fromFilter.addEventListener("change", renderList);
+        els.statusFilter.addEventListener("change", renderList);
+        els.exportBtn.addEventListener("click", exportData);
+        els.importFile.addEventListener("change", importData);
+      }
+
+      function renderAll() {
+        renderTodayDuet();
+        renderStats();
+        renderList();
+      }
+
+      function renderTodayDuet() {
+        const today = getTokyoToday();
+        const latestLu = findLatestByFrom("Lu", today);
+        const latestBruno = findLatestByFrom("Bruno", today);
+        els.todayDuet.innerHTML = [renderDuetCard("Lu", latestLu), renderDuetCard("Bruno", latestBruno)].join("");
+      }
+
+      function renderDuetCard(name, song) {
+        if (!song) {
+          return `
+            <div class="duet-card">
+              <div>
+                <p class="duet-label">${escapeHTML(name)}</p>
+                <p class="empty-night">今天还没有 ${escapeHTML(name)} 的推歌。</p>
+              </div>
+              <button class="btn secondary small" type="button" data-quick-from="${escapeAttribute(name)}">马上记录</button>
+            </div>
+          `;
+        }
+        return `
+          <div class="duet-card">
+            <div>
+              <p class="duet-label">${escapeHTML(name)}</p>
+              <p class="duet-title">${escapeHTML(song.title)}</p>
+              <p class="duet-meta">${escapeHTML(song.artist || "未写歌手")} · ${escapeHTML(song.mood || song.date)}</p>
+            </div>
+            <button class="btn secondary small" type="button" data-open-id="${escapeAttribute(song.id)}">打开</button>
+          </div>
+        `;
+      }
+
+      function renderStats() {
+        const total = songs.length;
+        const listened = songs.filter(song => song.status === "listened").length;
+        const favorites = songs.filter(song => song.favorite).length;
+        els.statsRow.innerHTML = `
+          <div class="stat-pill"><strong>${total}</strong><span>songs</span></div>
+          <div class="stat-pill"><strong>${listened}</strong><span>listened</span></div>
+          <div class="stat-pill"><strong>${favorites}</strong><span>stars</span></div>
+        `;
+      }
+
+      function renderList() {
+        const items = getFilteredSongs();
+        if (!items.length) {
+          els.songList.innerHTML = `<div class="empty-state">歌墙现在还是空的。先把第一首歌钉上来，墙就开始发光。</div>`;
+          bindDynamicEvents();
+          return;
+        }
+        els.songList.innerHTML = items.map(renderSongItem).join("");
+        bindDynamicEvents();
+      }
+
+      function renderSongItem(song) {
+        const openLink = song.url ? `<a class="btn secondary small" href="${escapeAttribute(safeURL(song.url))}" target="_blank" rel="noopener noreferrer">打开链接</a>` : "";
+        const statusLabel = song.status === "listened" ? "已听" : "未听";
+        const statusClass = song.status === "listened" ? "ok" : "todo";
+        return `
+          <section class="song-item">
+            <div class="song-top">
+              <div>
+                <p class="song-title">${escapeHTML(song.favorite ? "★ " : "")}${escapeHTML(song.title)}</p>
+                <p class="song-artist">${escapeHTML(song.artist || "未写歌手")}</p>
+              </div>
+              <button class="btn ghost small" type="button" data-edit-id="${escapeAttribute(song.id)}">编辑</button>
+            </div>
+            <div class="chip-row">
+              <span class="chip">${escapeHTML(song.from)}</span>
+              <span class="chip">${escapeHTML(song.date)}</span>
+              <span class="chip ${statusClass}">${statusLabel}</span>
+              ${song.mood ? `<span class="chip">${escapeHTML(song.mood)}</span>` : ""}
+            </div>
+            ${song.note ? `<p class="song-note">${escapeHTML(song.note)}</p>` : ""}
+            <div class="actions">
+              ${openLink}
+              <button class="btn ghost small" type="button" data-toggle-listened="${escapeAttribute(song.id)}">${song.status === "listened" ? "标为未听" : "标为已听"}</button>
+              <button class="btn ghost small" type="button" data-toggle-fav="${escapeAttribute(song.id)}">${song.favorite ? "取消星标" : "星标"}</button>
+              <button class="btn danger small" type="button" data-delete-id="${escapeAttribute(song.id)}">删除</button>
+            </div>
+          </section>
+        `;
+      }
+
+      function bindDynamicEvents() {
+        document.querySelectorAll("[data-quick-from]").forEach(button => {
+          button.addEventListener("click", () => {
+            resetForm(false);
+            els.fromInput.value = button.dataset.quickFrom;
+            els.titleInput.focus({ preventScroll: false });
+          });
+        });
+        document.querySelectorAll("[data-open-id]").forEach(button => {
+          button.addEventListener("click", () => scrollToSong(button.dataset.openId));
+        });
+        document.querySelectorAll("[data-edit-id]").forEach(button => {
+          button.addEventListener("click", () => editSong(button.dataset.editId));
+        });
+        document.querySelectorAll("[data-toggle-listened]").forEach(button => {
+          button.addEventListener("click", () => toggleListened(button.dataset.toggleListened));
+        });
+        document.querySelectorAll("[data-toggle-fav]").forEach(button => {
+          button.addEventListener("click", () => toggleFavorite(button.dataset.toggleFav));
+        });
+        document.querySelectorAll("[data-delete-id]").forEach(button => {
+          button.addEventListener("click", () => deleteSong(button.dataset.deleteId));
+        });
+      }
+
+      function saveSong() {
+        const title = els.titleInput.value.trim();
+        if (!title) {
+          toast("歌名还空着，先给这首歌一个名字。");
+          return;
+        }
+        const payload = sanitizeSong({
+          id: editingId || makeId(),
+          from: els.fromInput.value,
+          date: els.dateInput.value || getTokyoToday(),
+          title,
+          artist: els.artistInput.value.trim(),
+          url: els.urlInput.value.trim(),
+          mood: els.moodInput.value.trim(),
+          note: els.noteInput.value.trim(),
+          status: editingId ? findSong(editingId)?.status || "todo" : "todo",
+          favorite: editingId ? Boolean(findSong(editingId)?.favorite) : false,
+          createdAt: editingId ? findSong(editingId)?.createdAt || new Date().toISOString() : new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+
+        if (editingId) {
+          songs = songs.map(song => song.id === editingId ? payload : song);
+          toast("这首歌已更新。");
+        } else {
+          songs.unshift(payload);
+          toast("已钉到推歌墙。小磁带咔哒一声归位。");
+        }
+        songs = uniqueSongs(songs);
+        saveSongs();
+        resetForm(false);
+        renderAll();
+      }
+
+      function editSong(id) {
+        const song = findSong(id);
+        if (!song) return;
+        editingId = song.id;
+        els.formTitle.textContent = "编辑这首歌";
+        els.saveSongBtn.textContent = "保存修改";
+        els.fromInput.value = song.from;
+        els.dateInput.value = song.date;
+        els.titleInput.value = song.title;
+        els.artistInput.value = song.artist;
+        els.urlInput.value = song.url;
+        els.moodInput.value = song.mood;
+        els.noteInput.value = song.note;
+        els.titleInput.focus({ preventScroll: false });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function resetForm(showToast = true) {
+        editingId = "";
+        els.formTitle.textContent = "加入一首歌";
+        els.saveSongBtn.textContent = "保存推歌";
+        els.fromInput.value = "Lu";
+        els.dateInput.value = getTokyoToday();
+        els.titleInput.value = "";
+        els.artistInput.value = "";
+        els.urlInput.value = "";
+        els.moodInput.value = "";
+        els.noteInput.value = "";
+        if (showToast) toast("表单已清空。");
+      }
+
+      function toggleListened(id) {
+        songs = songs.map(song => song.id === id ? { ...song, status: song.status === "listened" ? "todo" : "listened", updatedAt: new Date().toISOString() } : song);
+        saveSongs();
+        renderAll();
+      }
+
+      function toggleFavorite(id) {
+        songs = songs.map(song => song.id === id ? { ...song, favorite: !song.favorite, updatedAt: new Date().toISOString() } : song);
+        saveSongs();
+        renderAll();
+      }
+
+      function deleteSong(id) {
+        const song = findSong(id);
+        if (!song) return;
+        if (!confirm(`确定删除《${song.title}》吗？`)) return;
+        songs = songs.filter(item => item.id !== id);
+        saveSongs();
+        renderAll();
+        toast("已从歌墙取下。");
+      }
+
+      function scrollToSong(id) {
+        els.searchInput.value = "";
+        els.fromFilter.value = "all";
+        els.statusFilter.value = "all";
+        renderList();
+        setTimeout(() => {
+          const button = document.querySelector(`[data-edit-id="${cssEscape(id)}"]`);
+          const item = button?.closest(".song-item");
+          item?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 20);
+      }
+
+      function getFilteredSongs() {
+        const keyword = els.searchInput.value.trim().toLowerCase();
+        const from = els.fromFilter.value;
+        const status = els.statusFilter.value;
+        return songs
+          .filter(song => from === "all" || song.from === from)
+          .filter(song => {
+            if (status === "all") return true;
+            if (status === "favorite") return song.favorite;
+            return song.status === status;
+          })
+          .filter(song => {
+            if (!keyword) return true;
+            const haystack = [song.title, song.artist, song.mood, song.note, song.from, song.date].join(" ").toLowerCase();
+            return haystack.includes(keyword);
+          })
+          .sort((a, b) => b.date.localeCompare(a.date) || b.updatedAt.localeCompare(a.updatedAt));
+      }
+
+      function findLatestByFrom(from, today) {
+        const todaySong = songs
+          .filter(song => song.from === from && song.date === today)
+          .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+        if (todaySong) return todaySong;
+        return songs
+          .filter(song => song.from === from)
+          .sort((a, b) => b.date.localeCompare(a.date) || b.updatedAt.localeCompare(a.updatedAt))[0] || null;
+      }
+
+      function exportData() {
+        const payload = {
+          app: "brunolu",
+          module: MODULE,
+          version: VERSION,
+          exportedAt: new Date().toISOString(),
+          data: {
+            songs: uniqueSongs(songs)
+          }
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `brunolu_crosstalk_${getTokyoToday().replaceAll("-", "")}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toast("推歌墙 JSON 已导出。");
+      }
+
+      function importData(event) {
+        const file = event.target.files?.[0];
+        event.target.value = "";
+        if (!file) return;
+        if (!confirm("将覆盖当前推歌墙数据，确定吗？")) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(String(reader.result || ""));
+            validateImport(parsed);
+            songs = uniqueSongs(Array.isArray(parsed.data.songs) ? parsed.data.songs.map(sanitizeSong) : []);
+            saveSongs();
+            resetForm(false);
+            renderAll();
+            toast("导入完成。歌墙磁带盒换好了。");
+          } catch (error) {
+            alert(`导入失败：${error.message}`);
+          }
+        };
+        reader.onerror = () => alert("导入失败：无法读取文件。");
+        reader.readAsText(file, "utf-8");
+      }
+
+      function validateImport(payload) {
+        if (!payload || typeof payload !== "object") throw new Error("JSON 顶层不是对象。");
+        if (payload.app !== "brunolu") throw new Error("app 不匹配，必须是 brunolu。");
+        if (payload.module !== MODULE) throw new Error(`module 不匹配，必须是 ${MODULE}。`);
+        if (!payload.data || typeof payload.data !== "object") throw new Error("缺少 data 对象。");
+      }
+
+      function sanitizeSong(song) {
+        const source = song && typeof song === "object" ? song : {};
+        return {
+          id: typeof source.id === "string" && source.id ? source.id : makeId(),
+          from: source.from === "Bruno" ? "Bruno" : "Lu",
+          date: sanitizeDate(source.date),
+          title: sanitizeText(source.title, 80) || "Untitled Song",
+          artist: sanitizeText(source.artist, 80),
+          url: sanitizeURL(source.url),
+          mood: sanitizeText(source.mood, 40),
+          note: sanitizeText(source.note, 800),
+          status: source.status === "listened" ? "listened" : "todo",
+          favorite: Boolean(source.favorite),
+          createdAt: typeof source.createdAt === "string" ? source.createdAt : new Date().toISOString(),
+          updatedAt: typeof source.updatedAt === "string" ? source.updatedAt : new Date().toISOString()
+        };
+      }
+
+      function uniqueSongs(items) {
+        const map = new Map();
+        for (const item of items || []) {
+          const song = sanitizeSong(item);
+          map.set(song.id, song);
+        }
+        return Array.from(map.values()).sort((a, b) => b.date.localeCompare(a.date) || b.updatedAt.localeCompare(a.updatedAt));
+      }
+
+      function sanitizeText(value, max) {
+        return typeof value === "string" ? value.trim().slice(0, max) : "";
+      }
+
+      function sanitizeDate(value) {
+        if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return getTokyoToday();
+        return value;
+      }
+
+      function sanitizeURL(value) {
+        const url = typeof value === "string" ? value.trim().slice(0, 500) : "";
+        if (!url) return "";
+        if (/^https?:\/\//i.test(url)) return url;
+        return "";
+      }
+
+      function safeURL(value) {
+        return sanitizeURL(value) || "#";
+      }
+
+      function findSong(id) {
+        return songs.find(song => song.id === id) || null;
+      }
+
+      function saveSongs() {
+        localStorage.setItem(LS.songs, JSON.stringify(uniqueSongs(songs)));
+      }
+
+      function readJSON(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (_) {
+          return fallback;
+        }
+      }
+
+      function makeId() {
+        return `song_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 9)}`;
+      }
+
+      function getTokyoToday() {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Tokyo",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).formatToParts(new Date());
+        const get = (type) => parts.find(part => part.type === type)?.value;
+        return `${get("year")}-${get("month")}-${get("day")}`;
+      }
+
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>\"]/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;"
+        }[char]));
+      }
+
+      function escapeAttribute(value) {
+        return escapeHTML(value).replace(/'/g, "&#39;");
+      }
+
+      function cssEscape(value) {
+        if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(value);
+        return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+      }
+
+      let toastTimer = null;
+      function toast(text) {
+        els.toast.textContent = text;
+        els.toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
+      }
+    })();
+  </script>
+</body>
+</html>
